@@ -1,0 +1,284 @@
+\documentclass[
+paper=5.5in:8.5in,
+%a5paper,
+BCOR=7mm,
+twoside,
+DIV=calc,
+11pt,
+usegeometry,
+chapterprefix,
+headings=big,
+numbers=noenddot,
+%listof=totoc,
+listof=flat,
+listof=nochaptergap]{scrbook} 
+
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\usepackage[T1]{fontenc} % International character encodings
+\usepackage{makeidx}
+\usepackage{lettrine}
+\usepackage{scrlayer-scrpage}
+\usepackage{pifont}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{csquotes}
+\usepackage[export]{adjustbox}
+\usepackage{polyglossia}
+\usepackage{afterpage}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage[all]{nowidow}
+\usepackage{wrapfig}
+%\usepackage[pass]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc}
+\usepackage{subfiles}
+\usepackage{floatpag}
+\usepackage{pdfpages}
+
+\floatpagestyle{empty}
+
+\newcount\zzc
+\makeatletter
+\def\zz{%
+\ifnum\prevgraf<\c@L@lines
+\zzc\z@
+\loop
+\ifnum\zzc<\prevgraf
+\advance\zzc\@ne
+\afterassignment\zzda\count@\L@parshape\relax
+\repeat
+\parshape\L@parshape
+\fi}
+\def\zzda{\afterassignment\zzdb\dimen@}
+\def\zzdb{\afterassignment\zzdef\dimen@}
+\def\zzdef#1\relax{\edef\L@parshape{\the\numexpr\count@-1\relax\space #1}}
+\makeatother
+
+\makeatletter
+\newcommand{\unchapter}[1]{%
+  \begingroup
+  \let\@makechapterhead\@gobble % make \@makechapterhead do nothing
+  \chapter{#1}
+  \endgroup
+}
+\makeatother
+
+\MakeAutoQuote{»}{«}
+\catcode`\—=13
+%\protected\def—{\allowbreak\textemdash\allowbreak}
+\protected\def—{\textemdash}
+\newcommand\longdash{\mbox{---\,}\ignorespaces{}}
+
+\setdefaultlanguage[variant=uk]{english}
+
+\newfontfamily\booktitlefont[RawFeature={-ss02},LetterSpace=40,WordSpace=6]{EB Garamond}
+\newfontfamily\spacedfont[RawFeature={-ss02},LetterSpace=20,WordSpace=3]{EB Garamond}
+
+\newfontfamily\lettrinefont{acorninitials.ttf}
+\newfontfamily\headerfont{EB Garamond}
+%\newfontfamily\chapheadfont{Menuetto.ttf}
+%\newfontfamily\chapterfont{Menuetto.ttf}
+\renewcommand{\LettrineFontHook}{\fontspec{acorninitials.ttf}}
+
+
+\headsep=10pt
+\headheight=45pt
+\footskip=30pt
+
+\usepackage{ebgaramond} 
+%\usepackage{stix} % Alternative Stix font
+\defaultfontfeatures{Ligatures=TeX}
+\addtokomafont{part}{ebgaramond}
+\addtokomafont{partnumber}{ebgaramond}
+
+\renewcommand{\thechapter}{\Roman{chapter}}
+
+%\KOMAoption{toc}{flat}
+\newcommand*\hideentrynumber[1]{}
+%\DeclareNewTOC[options ]{extension }
+
+\BeforeTOCHead[toc]{%
+  \KOMAoptions{parskip=false}% no parskip in ToC
+  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
+}
+\BeforeTOCHead[tocline]{%
+  \KOMAoptions{parskip=false,numwidth=0}% no parskip in ToC
+  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
+}
+\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
+\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=-15pt,entrynumberformat=\hideentrynumber]{tocline}{figure}
+%\DeclareTOCStyleEntry[beforeskip=.1cm]{tocline}{chapter}
+%\DeclareTOCStyleEntry[beforeskip=.1cm]{tocline}{part}
+
+%\setkomafont{chapter}{\chapterfont\Huge\bfseries}
+\addtokomafont{disposition}{\normalfont}
+\automark{chapter}
+\lehead{Pride \& Prejudice}
+\rohead{Chapter \arabic{chapter}}
+%\raggedbottom
+\flushbottom
+
+\captionsetup[figure]{font=sc,labelformat=empty}
+
+\graphicspath{ {./images/} }
+
+\hyphenation{Dar-cy Ben-net Bing-ley Lu-cas Mery-ton Eliz-a-beth Wick-ham Col-lins}
+
+\begin{document}
+\frontmatter
+\pagestyle{empty}
+
+
+%\renewcommand*{\sectionmarkformat}{}
+\clearpage
+\KOMAoptions{headings=openleft}
+\includepdf[width=.5\textwidth]{halftitle.png}
+\includepdf[width=\textwidth]{frontispiece.png}
+\includepdf[width=1.1\textwidth]{titlepage.jpg}
+%\addtolist={ii,figure,Frontispiece,front}
+%\addtolist={iii,figure,Title Page,title}
+%\includegraphics[width=\linewidth]{titlepage}
+
+\renewcommand*\raggedchapter{\centering}
+%\KOMAoptions{headings=openright}
+%\pagestyle{empty}
+%\begin{figure}[p]
+%\begin{minipage}[c]{\linewidth}
+%\includegraphics[width=\linewidth]{newaccfront}
+%\end{minipage}
+%\end{figure}
+\renewcommand*{\chaptermarkformat}{}
+\renewcommand*{\chapterheadendvskip}{\vspace{0pt}}
+\renewcommand*{\chapterheadstartvskip}{\vspace{0pt}} %because all chapters have head artwork, no need for whitespace
+\KOMAoptions{headings=openleft}
+
+%\renewcommand*{\chapterpagestyle}{empty}
+\renewcommand{\contentsname}{\includegraphics[width=\linewidth]{contents}}
+\tableofcontents
+\clearpage
+
+%\unsettoc{lof}{chapteratlist}
+%\DeclareNewTOC[options ]{extension }
+\renewcommand{\listfigurename}{\includegraphics[width=\linewidth]{illustrations}}
+\listoffigures
+\clearpage
+
+\pagestyle{headings}
+\renewcommand*{\chapterpagestyle}{plain}
+\newcommand{\moderatelyhuge}{\fontsize{40}{50}\selectfont}
+
+
+
+\KOMAoptions{headings=openright}
+
+
+ 
+ \mainmatter
+
+\include{chapters/01.tex}
+\include{chapters/02.tex}
+\include{chapters/03.tex}
+\include{chapters/04.tex}
+\include{chapters/05.tex}
+\include{chapters/06.tex}
+\include{chapters/07.tex}
+\include{chapters/08.tex}
+\include{chapters/09.tex}
+\include{chapters/10.tex}
+\include{chapters/11.tex}
+\include{chapters/12.tex}
+\include{chapters/13.tex}
+\include{chapters/14.tex}
+\include{chapters/15.tex}
+\include{chapters/16.tex}
+\include{chapters/17.tex}
+\include{chapters/18.tex}
+\include{chapters/19.tex}
+\include{chapters/20.tex}
+\include{chapters/21.tex}
+\include{chapters/22.tex}
+\include{chapters/23.tex}
+\include{chapters/24.tex}
+\include{chapters/25.tex}
+\include{chapters/26.tex}
+\include{chapters/27.tex}
+\include{chapters/28.tex}
+\include{chapters/29.tex}
+\include{chapters/30.tex}
+\include{chapters/31.tex}
+\include{chapters/32.tex}
+\include{chapters/33.tex}
+\include{chapters/34.tex}
+\include{chapters/35.tex}
+\include{chapters/36.tex}
+\include{chapters/37.tex}
+\include{chapters/38.tex}
+\include{chapters/39.tex}
+\include{chapters/40.tex}
+\include{chapters/41.tex}
+\include{chapters/42.tex}
+\include{chapters/43.tex}
+\include{chapters/44.tex}
+\include{chapters/45.tex}
+\include{chapters/46.tex}
+\include{chapters/47.tex}
+\include{chapters/48.tex}
+\include{chapters/49.tex}
+\include{chapters/50.tex}
+\include{chapters/51.tex}
+\include{chapters/52.tex}
+\include{chapters/53.tex}
+\include{chapters/54.tex}
+\include{chapters/55.tex}
+\include{chapters/56.tex}
+\include{chapters/57.tex}
+\include{chapters/58.tex}
+\include{chapters/59.tex}
+\include{chapters/60.tex}
+\include{chapters/61.tex}
+
+\KOMAoptions{headings=openright}
+%\KOMAoptions{fontsize=12.5pt}
+%\vspace*{-2.5cm}
+
+
+%\cleardoublepage
+
+\renewcommand*{\chapterheadendvskip}{\vfill}
+\renewcommand*{\chapterheadstartvskip}{\vfill}
+
+\KOMAoptions{headings=openleft}
+\chapter*{}
+
+\centering
+
+\begin{figure}[t!]
+\centering
+\includegraphics[width=.4\linewidth]{colophon}
+\end{figure}
+\vspace{-2cm}
+
+EB Garamond is Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. This digital version reproduces the original design by Claude Garamont closely: the source for the letterforms is a scan of a specimen known as the \enquote{Berner specimen,} which was composed in 1592 by Conrad Berner, the son-in-law of Christian Egenolff and his successor at the Egenolff print office.  \\github.com/georgd/EB-Garamond
+
+\rule{0.5\textwidth}{.4pt}
+
+\textit{Pride \& Prejudice} was first published in January 1813 by T. Egerton, Whitehall, credited only to »the Author of \textit{Sense \& Sensibility}« (which had been published in 1811, credited to »a Lady«). It was not republished under Jane Austen's (1775\textendash1817) own name until after her death.\\gutenberg.org/ebooks/1342
+
+\rule{0.5\textwidth}{.4pt}
+
+Illustrations by Irish artist Hugh Thomson (1860\textendash1920) are from the 1894 edition published by George Allen in London. Grateful acknowledgment is made to the Internet Archive, which in 2007 digitized a copy of this edition belonging to the New York Public Library.\\archive.org/details/prideprejudice00aust
+
+\rule{0.5\textwidth}{.4pt}
+
+This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed: creativecommons.org/publicdomain/zero/1.0/\\
+
+%\vspace{-0.5cm}
+%\noindent\hfil\rule{0.5\textwidth}{.4pt}\hfil 
+\rule{0.5\textwidth}{.4pt}
+
+Typeset in \LaTeX{}. Last revised \today.
+\thispagestyle{empty}
+\end{document}
