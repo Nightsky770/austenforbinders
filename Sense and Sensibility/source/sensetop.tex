@@ -1,140 +1,33 @@
 \documentclass[
 a5paper,
 %paper=5.5in:8.5in,
-BCOR=7mm,
-twoside,
-DIV=calc,
-11pt,
-usegeometry,
-chapterprefix,
-headings=big,
-numbers=noenddot,
-%listof=totoc,
-listof=flat,
-listof=nochaptergap]{scrbook} 
+]{scrbook} 
+\usepackage{bindery}
+\usepackage{dropcaps}
+\usepackage{illustrations}
+\usepackage{denseromantoc}
 
-\usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{fontspec}
-\usepackage[T1]{fontenc} % International character encodings
-\usepackage{makeidx}
-\usepackage{lettrine}
-\usepackage{scrlayer-scrpage}
-\usepackage{pifont}
-\usepackage{enumitem}
-\usepackage{caption}
-\usepackage{csquotes}
-\usepackage[export]{adjustbox}
-\usepackage{polyglossia}
-\usepackage{afterpage}
-\usepackage{microtype}
-\usepackage{amsmath}
-\usepackage[defaultlines=2,all]{nowidow}
-\usepackage{wrapfig}
-\usepackage[pass]{geometry}
-\usepackage{tikz}
-\usetikzlibrary{positioning,calc}
-\usepackage{subfiles}
-\usepackage{floatpag}
-%\usepackage{showframe}
-\usepackage{pdfpages}
-
-\makeatletter
-\newcommand{\unchapter}[1]{%
-  \begingroup
-  \let\@makechapterhead\@gobble % make \@makechapterhead do nothing
-  \chapter{#1}
-  \endgroup
-}
-\makeatother
-
-\newcount\zzc
-\makeatletter
-\def\zz{%
-\ifnum\prevgraf<\c@L@lines
-\zzc\z@
-\loop
-\ifnum\zzc<\prevgraf
-\advance\zzc\@ne
-\afterassignment\zzda\count@\L@parshape\relax
-\repeat
-\parshape\L@parshape
-\fi}
-\def\zzda{\afterassignment\zzdb\dimen@}
-\def\zzdb{\afterassignment\zzdef\dimen@}
-\def\zzdef#1\relax{\edef\L@parshape{\the\numexpr\count@-1\relax\space #1}}
-\makeatother
-
-\MakeAutoQuote{»}{«}
-\catcode`\—=13
-\protected\def—{\textemdash\allowbreak}
-\newcommand\longdash{\mbox{---\,}\ignorespaces{}}
-
-\setdefaultlanguage[variant=uk]{english}
-
-\newfontfamily\booktitlefont[RawFeature={-ss02},LetterSpace=40,WordSpace=6]{EB Garamond}
-\newfontfamily\spacedfont[RawFeature={-ss02},LetterSpace=20,WordSpace=3]{EB Garamond}
-
-\newfontfamily\lettrinefont{FloralCapsNouveau.ttf}
-\newfontfamily\headerfont{EB Garamond}
-\newfontfamily\chapheadfont{CATChilds.ttf}
-\newfontfamily\chapterfont{Amarante-Regular.ttf}
-\renewcommand{\LettrineFontHook}{\fontspec{FloralCapsNouveau.ttf}}
-
-
-\headsep=10pt
-\headheight=45pt
-\footskip=30pt
-
-\usepackage{ebgaramond} 
-%\usepackage{stix} % Alternative Stix font
-\defaultfontfeatures{Ligatures=TeX}
-\addtokomafont{part}{ebgaramond}
-\addtokomafont{partnumber}{ebgaramond}
-
-\renewcommand{\thechapter}{\Roman{chapter}}
-
-%\KOMAoption{toc}{flat}
-\newcommand*\hideentrynumber[1]{}
-%\DeclareNewTOC[options ]{extension }
-
-%\BeforeTOCHead[toc]{%
-%  \KOMAoptions{parskip=false}% no parskip in ToC
-%  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
-%}
-%\BeforeTOCHead[tocline]{%
-%  \KOMAoptions{parskip=false,numwidth=0}% no parskip in ToC
-%  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
-%}
-
-
-
-\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
-\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{tocline}{figure}
+\renewfontfamily\chapterfont{Amarante-Regular.ttf}
+\setdropcaps{FloralCapsNouveau.ttf}
 
 
 \setkomafont{chapter}{\chapterfont\Huge}
-\addtokomafont{disposition}{\normalfont}
+
 \automark{chapter}
 \lehead{Sense \& Sensibility}
 \rohead{Chapter \arabic{chapter}}
 %\raggedbottom
 \flushbottom
 
-\captionsetup[figure]{font=sc,labelformat=empty}
-\floatpagestyle{empty}
-\graphicspath{ {./images/} }
 
 \hyphenation{Dash-wood El-i-nor Mar-i-anne}
 
 \begin{document}
 \frontmatter
-%\renewcommand*{\sectionmarkformat}{}
+
 
 \begin{titlepage}
-\makeatletter
-\@ifclasswith{scrbook}{a5paper}
-{%a4
+\begin{a4}
  \begin{center}
    \vfill
 	\begin{tikzpicture}[remember picture, overlay]  
@@ -146,8 +39,9 @@ listof=nochaptergap]{scrbook}
 	\end{tikzpicture}
 	\vfill
  	\end{center}
+\end{a4}
 
-}{%letter
+\begin{letter}
  \begin{center}
    \vfill
 	\begin{tikzpicture}[remember picture, overlay]  
@@ -159,44 +53,26 @@ listof=nochaptergap]{scrbook}
 	\end{tikzpicture}
 	\vfill
  	\end{center}
-}
-\makeatother
+\end{letter}
+
 \end{titlepage}		
 
-%\vfill
-%\vspace{6cm}
-%  \includegraphics[width=\linewidth]{snstitle}
-%\vfill
-%  \includegraphics[width=.08\linewidth]{by}\\
-%  \includegraphics[width=.6\linewidth]{authorja}
-%  \vfill
-%  \includegraphics[width=.6\linewidth]{illusht}
-
-
-  
-%    \recalctypearea
-%\restoregeometry
-%\pagestyle{empty}
-%\cleardoubleoddpage
-%\includepdf[width=1.1\textwidth]{cover.png}
 \pagestyle{plain}
-\renewcommand*\raggedchapter{\centering}
 
 \KOMAoptions{headings=openleft}
 
 \renewcommand{\contentsname}{\includegraphics[width=.45\linewidth]{contents}}
 \tableofcontents
-\clearpage
 
-%\unsettoc{lof}{chapteratlist}
-%\DeclareNewTOC[options ]{extension }
-%\renewcommand{\listfigurename}{\includegraphics[width=.5\linewidth]{listofillus}}
-%\listoffigures
-%\clearpage
+
+\renewcommand{\listfigurename}{\includegraphics[width=.45\linewidth]{listofillus}}
+%\renewcommand{\listfigurename}{List of Illustrations}
+\listoffigures
+\thispagestyle{plain} %this should not be necessary--fix
 
 \pagestyle{headings}
 \renewcommand*{\chapterpagestyle}{plain}
-\newcommand{\moderatelyhuge}{\fontsize{40}{50}\selectfont}
+%\newcommand{\moderatelyhuge}{\fontsize{40}{50}\selectfont}
 \RedeclareSectionCommand[afterskip=1.5cm]{chapter}
 
 
@@ -267,33 +143,37 @@ listof=nochaptergap]{scrbook}
 \chapter*{Colophon}
 
 \centering
-EB Garamond is Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. This digital version reproduces the original design by Claude Garamont closely: the source for the letterforms is a scan of a specimen known as the \enquote{Berner specimen,} which was composed in 1592 by Conrad Berner, the son-in-law of Christian Egenolff and his successor at the Egenolff print office.  \\github.com/georgd/EB-Garamond
-
-
-\rule{0.5\textwidth}{.4pt}
-
-Chapter headings are set in »Amarante«, by Karolina Lach. Dropcaps are set in »Floral Caps Nouveau«, by George Williams. \\karolinalach.com
-
-\rule{0.5\textwidth}{.4pt}
-
-Title page decoration is from a Roycroft catalog published in 1906. Last page decoration is from a 1912 issue of the German magazine \textit{Velhagen \& Kasings Monatshefte}, held and digitized by the University of Illinois at Urbana-Champaign.
-
-\rule{0.5\textwidth}{.4pt}
-
-\textit{Sense \& Sensibility} was originally published in 1811 by Thomas Egerton in London (UK), credited only to »a Lady.« It was not republished under Jane Austen's (1775\textendash1817) own name until after her death.\\gutenberg.org/ebooks/161
-
-\rule{0.5\textwidth}{.4pt}
-
-Illustrations by Irish artist Hugh Thomson (1860\textendash1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK).
-
-\rule{0.5\textwidth}{.4pt}
-
-This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed: creativecommons.org/publicdomain/zero/1.0/\\
-
-%\vspace{-0.5cm}
-%\noindent\hfil\rule{0.5\textwidth}{.4pt}\hfil 
-\rule{0.5\textwidth}{.4pt}
-
+\vfill
+\begin{minipage}{\textwidth}
+\textit{Sense \& Sensibility} was originally published in 1811 by Thomas Egerton in London (UK), credited only to »a Lady.« It was not republished under Jane Austen's (1775\textendash1817) own name until after her death. Illustrations by Irish artist Hugh Thomson (1860\textendash1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK).
+\end{minipage}
+\vfill
+gutenberg.org/ebooks/161
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
+\begin{minipage}{\textwidth}
+Main text is set in »EB Garamond«, Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. This digital version reproduces the original design by Claude Garamont closely: the source for the letterforms is a scan of a specimen known as the \enquote{Berner specimen,} which was composed in 1592 by Conrad Berner, the son-in-law of Christian Egenolff and his successor at the Egenolff print office. Chapter headings are set in »Amarante«, by Karolina Lach. Dropcaps are set in »Floral Caps Nouveau«, by George Williams. 
+\end{minipage} 
+\vfill
+github.com/georgd/EB-Garamond\\
+karolinalach.com\\
+1001fonts.com/users/gww/
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
+\begin{minipage}{\textwidth}
+Title page decoration is from a Roycroft catalog published in 1906. Last page decoration is from a 1912 issue of the German magazine \textit{Velhagen \& Kasings Monatshefte}, held and digitised by the University of Illinois at Urbana-Champaign.
+\end{minipage}
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
+\begin{minipage}{\textwidth}
+This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed: creativecommons.org/publicdomain/zero/1.0/
+\end{minipage}
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
 Typeset in \LaTeX{}. Last revised \today.
 \thispagestyle{empty}
 

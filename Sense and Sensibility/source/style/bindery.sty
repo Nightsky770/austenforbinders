@@ -1,0 +1,81 @@
+\usepackage{xcolor}
+\usepackage{fontspec}
+\usepackage[T1]{fontenc} % International character encodings
+\usepackage{makeidx}
+\usepackage{scrlayer-scrpage}
+\usepackage{pifont}
+\usepackage[maxlevel=3,autostyle]{csquotes}
+\usepackage[export]{adjustbox}
+\usepackage{polyglossia}
+\usepackage{afterpage}
+\usepackage{microtype}
+\usepackage{tocbasic}
+\usepackage[pass]{geometry}
+\usepackage{subfiles}
+\usepackage[all,defaultlines=2]{nowidow}
+\usepackage{setspaceenhanced}
+\usepackage{ebgaramond} 
+\usepackage{ellipsis}
+\usepackage{pdfpages}
+\usepackage{verse}
+\usepackage{epigraph}
+\usepackage{comment}
+
+\KOMAoption{BCOR}{7mm}
+\KOMAoption{twoside}{true}
+\KOMAoption{DIV}{calc}
+\KOMAoption{usegeometry}{true}
+\KOMAoption{chapterprefix}{true}
+\KOMAoption{headings}{big}
+\KOMAoption{numbers}{noenddot}
+\KOMAoption{listof}{flat,nochaptergap}
+
+\renewcommand\raggedsection{\centering} %always center chapter heads
+
+\graphicspath{ {./images/} }
+
+\MakeAutoQuote{»}{«}
+\catcode`\—=13
+\protected\def—{\textemdash}
+\newcommand\longdash{\mbox{---\,}\ignorespaces{}} %corrects issue with lines breaking between dash and end quote
+
+\newcommand{\HUGE}{\fontsize{30}{40}\selectfont}
+
+
+\setmainfont{EB Garamond}[UprightFeatures={CharacterVariant=11}]
+\setdefaultlanguage[variant=uk]{english}
+\addtokomafont{disposition}{\normalfont}
+\newfontfamily\chapterfont{EB Garamond} %might override this later
+\setkomafont{chapter}{\chapterfont\Huge}
+
+\headsep=10pt
+\headheight=45pt
+\footskip=30pt
+
+\defaultfontfeatures{Ligatures=TeX}
+
+\flushbottom
+
+\newcommand*\hideentrynumber[1]{}
+
+\setlength{\epigraphwidth}{0.8\textwidth}
+\renewcommand{\epigraphflush}{center}
+\renewcommand{\sourceflush}{center}
+
+\makeatletter
+\@ifclasswith{scrbook}{a5paper}
+{%
+	\includecomment{a4}
+	\excludecomment{letter}
+}{%
+	\excludecomment{a4}
+	\includecomment{letter}
+}
+
+\newcommand{\headlesschapter}[1]{%just in case we need to suppress the chapter head
+  \begingroup
+  \let\@makechapterhead\@gobble % make \@makechapterhead do nothing
+  \chapter{#1}
+  \endgroup
+}
+\makeatother

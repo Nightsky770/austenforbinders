@@ -1,0 +1,33 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dropcaps}
+
+
+\RequirePackage{lettrine}
+\RequirePackage{xparse}
+
+
+\NewDocumentCommand{\setdropcaps}{m}
+{
+	\renewcommand{\LettrineFontHook}{\fontspec{#1}}
+}
+
+\makeatletter
+\newcount\zzc
+
+
+\def\zz{%
+\ifnum\prevgraf<\c@L@lines
+\zzc\z@
+\loop
+\ifnum\zzc<\prevgraf
+\advance\zzc\@ne
+\afterassignment\zzda\count@\L@parshape\relax
+\repeat
+\parshape\L@parshape
+\fi}
+\def\zzda{\afterassignment\zzdb\dimen@}
+\def\zzdb{\afterassignment\zzdef\dimen@}
+\def\zzdef#1\relax{\edef\L@parshape{\the\numexpr\count@-1\relax\space #1}}
+\makeatother
+
+

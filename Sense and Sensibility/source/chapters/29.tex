@@ -33,9 +33,7 @@ Bond Street, January.
 ~\\
 \indent    I have just had the honour of receiving your letter, for which I beg to return my sincere acknowledgments. I am much concerned to find there was anything in my behaviour last night that did not meet your approbation; and though I am quite at a loss to discover in what point I could be so unfortunate as to offend you, I entreat your forgiveness of what I can assure you to have been perfectly unintentional. I shall never reflect on my former acquaintance with your family in Devonshire without the most grateful pleasure, and flatter myself it will not be broken by any mistake or misapprehension of my actions. My esteem for your whole family is very sincere; but if I have been so unfortunate as to give rise to a belief of more than I felt, or meant to express, I shall reproach myself for not having been more guarded in my professions of that esteem. That I should ever have meant more you will allow to be impossible, when you understand that my affections have been long engaged elsewhere, and it will not be many weeks, I believe, before this engagement is fulfilled. It is with great regret that I obey your commands in returning the letters with which I have been honoured from you, and the lock of hair, which you so obligingly bestowed on me.
 
-\makeatletter
-\@ifclasswith{scrbook}{a5paper}
-{%
+\begin{a4}
 	\begin{flushright}
 	\begin{minipage}{.5\textwidth}
 	I am, dear Madam,\\                      
@@ -44,7 +42,9 @@ Bond Street, January.
 	\textsc{John Willoughby}.
 	\end{minipage}
 	\end{flushright}
-}{%
+\end{a4}
+
+\begin{letter}
 	\begin{flushright}
 	\begin{minipage}{.3\textwidth}
 	I am, dear Madam,\\                      
@@ -53,8 +53,7 @@ Bond Street, January.
 	\textsc{John Willoughby}.
 	\end{minipage}
 	\end{flushright}
-}
-\makeatother
+\end{letter}
 
 
 \end{quotation}
