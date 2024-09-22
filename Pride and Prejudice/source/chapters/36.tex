@@ -3,9 +3,7 @@
 %\setcounter{chapter}{35}
 \chapter[Chapter \thechapter]{}
 
-\makeatletter
-\@ifclasswith{scrbook}{a5paper}
-{%
+\begin{a4}
 	\begin{frame}{}
 	  \begin{tikzpicture}[remember picture, overlay]
 	  
@@ -21,7 +19,9 @@
 	\includegraphics[width=.65\linewidth]{36top}
 	\captionlistentry{Headpiece to Chapter \thechapter}
 	\end{figure}
-}{%
+\end{a4}
+
+\begin{letter}
 	\begin{frame}{}
 	  \begin{tikzpicture}[remember picture, overlay]
 		\node[left] at ($(current page.west)+(4.58cm,1.7cm)$) {\includegraphics[width=.27\linewidth]{36sword}};
@@ -34,27 +34,9 @@
 	\includegraphics[width=.65\linewidth]{36top}
 	\captionlistentry{Headpiece to Chapter \thechapter}
 	\end{figure}	 
-}
-\makeatother
+\end{letter}
 
 
-
-
-%\begin{scope}[xshift=0cm]
-%		\includegraphics[width=.2\linewidth]{36sword}	
-%	\end{scope}
-%	\begin{scope}[xshift=8cm]
-%		\includegraphics[width=.5\linewidth]{36top}
-%		\captionlistentry{Headpiece to Chapter \thechapter}  
-%	\end{scope}
-
-
-%\begin{figure}[t!]
-%\centering
-%\flushright
-%\includegraphics[width=.5\linewidth]{36top}
-%\captionlistentry{Headpiece to Chapter \thechapter}
-%\end{figure}
 
 
 
