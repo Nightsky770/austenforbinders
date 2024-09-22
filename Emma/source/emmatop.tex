@@ -1,129 +1,31 @@
 \documentclass[
-a5paper,
-%paper=5.5in:8.5in,
-BCOR=7mm,
-twoside,
-DIV=calc,
-11pt,
-usegeometry,
-chapterprefix,
-headings=big,
-numbers=noenddot,
-%listof=totoc,
-listof=flat,
-listof=nochaptergap]{scrbook} 
+%a5paper,
+paper=5.5in:8.5in,
+]{scrbook} 
 
-\usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{fontspec}
-\usepackage[T1]{fontenc} % International character encodings
-\usepackage{makeidx}
-\usepackage{lettrine}
-\usepackage{scrlayer-scrpage}
-\usepackage{pifont}
-\usepackage{enumitem}
-\usepackage{caption}
-\usepackage[maxlevel=3,autostyle]{csquotes}
-\usepackage[export]{adjustbox}
-\usepackage{polyglossia}
-\usepackage{afterpage}
-\usepackage{microtype}
-\usepackage{amsmath}
-\usepackage[defaultlines=2,all]{nowidow}
-\usepackage{wrapfig}
-\usepackage[pass]{geometry}
-\usepackage{tikz}
-\usetikzlibrary{positioning,calc}
-\usepackage{subfiles}
-\usepackage{floatpag}
-%\usepackage{showframe}
-\usepackage{pdfpages}
+\usepackage{bindery}
+\usepackage{dropcaps}
+\usepackage{illustrations}
+\usepackage{denseromantoc}
 \usepackage{verse}
-\usepackage{ebgaramond} 
 
-\makeatletter
-\newcommand{\unchapter}[1]{%
-  \begingroup
-  \let\@makechapterhead\@gobble % make \@makechapterhead do nothing
-  \chapter{#1}
-  \endgroup
-}
-\makeatother
+\setdropcaps{FloralCapsNouveau.ttf}
 
-\newcount\zzc
-\makeatletter
-\def\zz{%
-\ifnum\prevgraf<\c@L@lines
-\zzc\z@
-\loop
-\ifnum\zzc<\prevgraf
-\advance\zzc\@ne
-\afterassignment\zzda\count@\L@parshape\relax
-\repeat
-\parshape\L@parshape
-\fi}
-\def\zzda{\afterassignment\zzdb\dimen@}
-\def\zzdb{\afterassignment\zzdef\dimen@}
-\def\zzdef#1\relax{\edef\L@parshape{\the\numexpr\count@-1\relax\space #1}}
-\makeatother
-
-\MakeAutoQuote{»}{«}
-\catcode`\—=13
-\protected\def—{\textemdash\allowbreak}
-\newcommand\longdash{\mbox{---\,}\ignorespaces{}}
-\setdefaultlanguage[variant=uk]{english}
-\setmainlanguage[variant=uk]{english}
-
-\newfontfamily\booktitlefont[RawFeature={-ss02},LetterSpace=40,WordSpace=6]{EB Garamond}
-\newfontfamily\spacedfont[RawFeature={-ss02},LetterSpace=20,WordSpace=3]{EB Garamond}
-
-\newfontfamily\lettrinefont{FloralCapsNouveau.ttf}
-\newfontfamily\headerfont{EB Garamond}
-
-\newfontfamily\chapterfont{Amarante-Regular.ttf}
-\renewcommand{\LettrineFontHook}{\fontspec{FloralCapsNouveau.ttf}}
-
-
-\headsep=10pt
-\headheight=45pt
-\footskip=30pt
-
-
-%\usepackage{stix} % Alternative Stix font
-\defaultfontfeatures{Ligatures=TeX}
+\renewfontfamily\chapterfont{Amarante-Regular.ttf}
 
 \renewcommand{\thechapter}{\Roman{chapter}}
 
-%\KOMAoption{toc}{flat}
-\newcommand*\hideentrynumber[1]{}
-%\DeclareNewTOC[options ]{extension }
 
-%\BeforeTOCHead[toc]{%
-%  \KOMAoptions{parskip=false}% no parskip in ToC
-%  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
-%}
-%\BeforeTOCHead[tocline]{%
-%  \KOMAoptions{parskip=false,numwidth=0}% no parskip in ToC
-%  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
-%}
+%\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
+%\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{tocline}{figure}
 
 
-
-\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
-\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{tocline}{figure}
-
-
-\setkomafont{chapter}{\chapterfont\Huge}
-\addtokomafont{disposition}{\normalfont}
 \automark{chapter}
 \lehead{Emma}
 \rohead{Chapter \arabic{chapter}}
-%\raggedbottom
+
 \flushbottom
 
-\captionsetup[figure]{font=sc,labelformat=empty}
-\floatpagestyle{empty}
-\graphicspath{ {./images/} }
 
 \hyphenation{}
 
@@ -133,26 +35,21 @@ listof=nochaptergap]{scrbook}
 
 
 \pagestyle{plain}
-\renewcommand*\raggedchapter{\centering}
+
 
 \KOMAoptions{headings=openleft}
 
-%\renewcommand{\contentsname}{\includegraphics[width=.45\linewidth]{contents}}
+
 \renewcommand*{\chapterheadstartvskip}{\vspace{0pt}} %scootch up TOC header
 \tableofcontents
-%\enlargethispage{2\baselineskip}
-
-\clearpage
-
 
 
 \renewcommand{\listfigurename}{List of Illustrations}
-%\renewcommand{\listfigurename}{\includegraphics[width=.5\linewidth]{listofillus}}
 \listoffigures
-\clearpage
+\thispagestyle{plain} %this should not be necessary--fix
 
 \makeatletter
-\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}} %reset to default
+\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}} %reset vskip to default after scootching up TOC header
 \makeatother
 
 \pagestyle{headings}
@@ -223,45 +120,45 @@ listof=nochaptergap]{scrbook}
 \include{chapters/55.tex}
 
 \KOMAoptions{headings=openright}
-%\KOMAoptions{fontsize=12.5pt}
-%\vspace*{-2.5cm}
 
-
-%\cleardoublepage
 \RedeclareSectionCommand[afterskip=1cm,beforeskip=0cm]{chapter}
 \KOMAoptions{headings=openleft}
 \chapter*{Colophon}
-
 \centering
-EB Garamond is Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century.\\github.com/georgd/EB-Garamond
 
-\rule{0.5\textwidth}{.4pt}
-
-\textit{Emma} was first published in December 1815 by John Murray, credited only to »the Author of \textit{Pride \& Prejudice}«. It was not republished under Jane Austen's (1775\textendash1817) own name until after her death.\\gutenberg.org/ebooks/158
-
-\rule{0.5\textwidth}{.4pt}
-
-Illustrations by Irish artist Hugh Thomson (1860\textendash1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK). Grateful acknowledgement is made to the Internet Archive, which in 2008 digitised a copy of this edition belonging to the University of California.
-
-\rule{0.5\textwidth}{.4pt}
-
-Chapter headings are set in »Amarante«, by Karolina Lach. Dropcaps are set in »Floral Caps Nouveau«, by George Williams. Title page is set in »Bolton« and »Bolton Titling«, by Paul Lloyd.
-
-\rule{0.5\textwidth}{.4pt}
-
+\begin{minipage}{\textwidth}
+\textit{Emma} was first published in December 1815 by John Murray, credited only to »the Author of \textit{Pride \& Prejudice}«. It was not republished under Jane Austen's (1775\textendash1817) own name until after her death. Illustrations by Hugh Thomson (1860\textendash1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK). Grateful acknowledgement is made to the Internet Archive, which in 2008 digitised a copy of this edition belonging to the University of California.
+\end{minipage}
+\vfill
+gutenberg.org/ebooks/158
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
+\begin{minipage}{\textwidth}
+Main text is set in »EB Garamond«, Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. Chapter headings are set in »Amarante«, by Karolina Lach. Dropcaps are set in »Floral Caps Nouveau«, by George Williams. Title page is set in »Bolton« and »Bolton Titling«, by Paul Lloyd.
+\end{minipage}
+\vfill
+github.com/georgd/EB-Garamond\\
+karolinalach.com\\
+1001fonts.com/users/gww/\\
+moorstation.org/typoasis/designers/lloyd/
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
+\begin{minipage}{\textwidth}
 Title page decoration is by Dutch artist Willem Wenckebach (1860\textendash1937). The original is held by the Rijksmuseum in Amsterdam. Last page decoration is from a 1912 issue of the German magazine \textit{Velhagen \& Kasings Monatshefte}, held and digitised by the University of Illinois at Urbana-Champaign.
-
-\rule{0.5\textwidth}{.4pt}
-
-
-This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed: creativecommons.org/publicdomain/zero/1.0/\\
-
-%\vspace{-0.5cm}
-%\noindent\hfil\rule{0.5\textwidth}{.4pt}\hfil 
-\rule{0.5\textwidth}{.4pt}
-
+\end{minipage}
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
+\begin{minipage}{\textwidth}
+This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed: creativecommons.org/publicdomain/zero/1.0/
+\end{minipage}
+\vfill
+\includegraphics[width=.4\textwidth]{flourish}
+\vfill
 Typeset in \LaTeX{}. Last revised \today.
-\enlargethispage{2\baselineskip}
+%\enlargethispage{2\baselineskip}
 \thispagestyle{empty}
 
 
