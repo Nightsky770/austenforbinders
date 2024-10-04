@@ -1,5 +1,5 @@
 # austenforbinders
-The works of Jane Austen, typeset and imposed and ready to be printed and bound.
+The works of Jane Austen, typeset and imposed and ready to be printed and bound. All are available in US letter and A4 format.
 
 Text and illustrations are in the public domain in the United States.
 
