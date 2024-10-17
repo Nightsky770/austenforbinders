@@ -1,10 +1,14 @@
-\usepackage{floatpag}
-\usepackage{caption}
-\usepackage{rotating}
-\usepackage{xcolor}
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\usepackage{tikz}
+\RequirePackage{floatpag}
+\RequirePackage{caption}
+\RequirePackage{rotating}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{wrapfig}
+\RequirePackage{environ}
+\RequirePackage{xparse}
+\RequirePackage{tikz}
+\RequirePackage{tocbasic}
+
 \usetikzlibrary{positioning,calc}
 
 \floatpagestyle{empty}
@@ -16,3 +20,104 @@
 
 
 \DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{tocline}{figure}
+
+%using colorbigpic
+%\begin{colorbigpic}
+%	[1.15] <-desired width, relative to \textwidth
+%	{bobslide} <-name of image file
+%	{Bob Cratchit went down a slide on Cornhill, at the end of a lane of boys, twenty times, in honour of its being Christmas Eve} <-caption
+	%[Bob Cratchit went down a slide] <-brief caption for TOC
+%\end{colorbigpic}
+
+\NewDocumentEnvironment{colorbigpic}{O{1.2} m m o}
+{%
+  \begin{figure}[p]
+    \vfill
+	\vspace*{-0.5cm}
+    \makebox[\textwidth][c]{%
+      \begin{minipage}{#1\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{#2}
+        \par\vspace{1em}%
+        \begin{minipage}{0.9\linewidth}%
+          \centering
+          \IfValueTF{#4}{%
+            \caption[\textbf{#4}]{#3}%
+          }{%
+            \caption[\textbf{#3}]{#3}%
+          }%
+        \end{minipage}
+      \end{minipage}%
+    }
+    \vfill
+  \end{figure}
+}
+{}
+
+% Environment for black and white big pictures with normal captions
+\NewDocumentEnvironment{bwbigpic}{O{1.2} m m o}
+{%
+  \begin{figure}[p]
+    \vfill
+	\vspace*{-0.5cm}
+    \makebox[\textwidth][c]{%
+      \begin{minipage}{#1\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{#2}
+        \par\vspace{1em}%
+        \begin{minipage}{0.9\linewidth}%
+          \centering
+          \IfValueTF{#4}{%
+            \caption[#4]{#3}%
+          }{%
+            \caption{#3}%
+          }%
+        \end{minipage}
+      \end{minipage}%
+    }
+    \vfill
+  \end{figure}
+}
+{}
+
+% Custom ToC and List of Figures setup
+\newcommand{\imagetoc}[1]{%
+  % #1: ToC image filename
+  \renewcommand{\contentsname}{\includegraphics[width=\linewidth]{#1}}
+}
+
+\newcommand{\imagelof}[2]{%
+  % #1: LoF image filename
+  % #2: LoF ToC entry text
+  
+  % Remove LoF from ToC
+  \DeclareTOCStyleEntry[level=0,indent=0pt]{tocline}{figure}
+  
+  % Customize LoF title
+  \renewcommand{\listfigurename}{\includegraphics[width=\linewidth]{#1}}
+  
+  % Add custom entry to ToC
+  \addcontentsline{toc}{chapter}{#2}
+  
+  % Redefine \listoffigures to use our custom setup
+  \renewcommand{\listoffigures}{%
+    \begingroup
+      \listoffigures@heading
+      \@starttoc{lof}%
+    \endgroup
+  }
+}
+
+% Define a helper command for the LoF heading
+\newcommand{\listoffigures@heading}{%
+  \if@twocolumn\@restonecoltrue\onecolumn
+  \else\@restonecolfalse\fi
+  \chapter*{\listfigurename}%
+  \if@restonecol\twocolumn\fi
+}
+
+%using \imagetoc and \imagelof
+% \imagetoc{contents}
+% \imagelof{illustrations}{List of Illustrations}
+% \tableofcontents
+% \listoffigures

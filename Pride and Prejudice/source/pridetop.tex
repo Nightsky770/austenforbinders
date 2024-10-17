@@ -7,6 +7,7 @@ paper=5.5in:8.5in,
 \usepackage{illustrations}
 \usepackage{dropcaps}
 
+
 \renewcommand{\thechapter}{\Roman{chapter}}
 
 \BeforeTOCHead[toc]{%
@@ -36,8 +37,8 @@ paper=5.5in:8.5in,
 \clearpage
 \KOMAoptions{headings=openleft}
 \includepdf[width=.5\textwidth]{halftitle.png}
- \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=\textwidth]{frontispiece.png}
- \includepdf[addtolist={1,figure,Title Page,titlepage},width=1.1\textwidth]{titlepage.jpg}
+ \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=1.1\textwidth]{frontispiece.png}
+ \includepdf[addtolist={1,figure,Title Page,titlepage},width=1.2\textwidth]{titlepage.jpg}
 
 \renewcommand*{\chaptermarkformat}{}
 \renewcommand*{\chapterheadendvskip}{\vspace{0pt}}
@@ -45,11 +46,15 @@ paper=5.5in:8.5in,
 \KOMAoptions{headings=openleft}
 \pagestyle{plain}
 
-\renewcommand{\contentsname}{\includegraphics[width=\linewidth]{contents}}
+
+\imagetoc{contents}
+\imagelof{illustrations}{List of Illustrations}
 \tableofcontents
 
-\renewcommand{\listfigurename}{\includegraphics[width=\linewidth]{illustrations}}
+\cleardoubleevenpage
+
 \listoffigures
+
  
 \mainmatter
 \pagestyle{headings}
