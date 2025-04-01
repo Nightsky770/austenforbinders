@@ -15,8 +15,10 @@
 \rotfloatpagestyle{empty}
 
 \captionsetup[figure]{font=sc,labelformat=empty}
+\graphicspath{ {./images/} }
 
 
+%allows us to override floatpag's behavior if we need to
 
 
 \DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{tocline}{figure}
@@ -27,13 +29,14 @@
 %	{bobslide} <-name of image file
 %	{Bob Cratchit went down a slide on Cornhill, at the end of a lane of boys, twenty times, in honour of its being Christmas Eve} <-caption
 	%[Bob Cratchit went down a slide] <-brief caption for TOC
+	%[bob] <- label, if necessary. To get a label but NOT a brief caption, put in a blank [] before this argument.
 %\end{colorbigpic}
 
-\NewDocumentEnvironment{colorbigpic}{O{1.2} m m o}
+\NewDocumentEnvironment{colorbigpic}{O{1.2} m m o o}
 {%
   \begin{figure}[p]
     \vfill
-	\vspace*{-0.5cm}
+    \vspace*{-0.5cm}
     \makebox[\textwidth][c]{%
       \begin{minipage}{#1\textwidth}
         \centering
@@ -46,6 +49,9 @@
           }{%
             \caption[\textbf{#3}]{#3}%
           }%
+          \IfValueTF{#5}{%
+            \label{#5}%
+          }{}%
         \end{minipage}
       \end{minipage}%
     }
@@ -55,11 +61,11 @@
 {}
 
 % Environment for black and white big pictures with normal captions
-\NewDocumentEnvironment{bwbigpic}{O{1.2} m m o}
+\NewDocumentEnvironment{bwbigpic}{O{1.2} m m o o}
 {%
   \begin{figure}[p]
     \vfill
-	\vspace*{-0.5cm}
+    \vspace*{-0.5cm}
     \makebox[\textwidth][c]{%
       \begin{minipage}{#1\textwidth}
         \centering
@@ -72,34 +78,31 @@
           }{%
             \caption{#3}%
           }%
-        \end{minipage}
+          \IfValueTF{#5}{%
+            \label{#5}%
+          }{}%
+		  \end{minipage}
       \end{minipage}%
     }
     \vfill
   \end{figure}
 }
 {}
+\makeatletter
 
-% Custom ToC and List of Figures setup
-\newcommand{\imagetoc}[1]{%
-  % #1: ToC image filename
-  \renewcommand{\contentsname}{\includegraphics[width=\linewidth]{#1}}
+\newcommand{\imagetoc}[2]{%  % #1: image file, #2: scale factor
+  \ifx\relax\detokenize{#2}\relax
+    \PackageWarning{illustrations}{Scale factor missing in \protect\imagetoc{#1}. Using default 0.8}%
+    \renewcommand{\contentsname}{\includegraphics[width=0.8\linewidth]{#1}}%
+  \else
+    \renewcommand{\contentsname}{\includegraphics[width=#2\linewidth]{#1}}%
+  \fi
 }
 
-\newcommand{\imagelof}[2]{%
-  % #1: LoF image filename
-  % #2: LoF ToC entry text
-  
-  % Remove LoF from ToC
+\newcommand{\imagelof}[3]{%  % #1: image file, #2: ToC text, #3: scale factor
   \DeclareTOCStyleEntry[level=0,indent=0pt]{tocline}{figure}
-  
-  % Customize LoF title
-  \renewcommand{\listfigurename}{\includegraphics[width=\linewidth]{#1}}
-  
-  % Add custom entry to ToC
+  \renewcommand{\listfigurename}{\includegraphics[width=#3\linewidth]{#1}}
   \addcontentsline{toc}{chapter}{#2}
-  
-  % Redefine \listoffigures to use our custom setup
   \renewcommand{\listoffigures}{%
     \begingroup
       \listoffigures@heading
@@ -108,6 +111,9 @@
   }
 }
 
+
+
+
 % Define a helper command for the LoF heading
 \newcommand{\listoffigures@heading}{%
   \if@twocolumn\@restonecoltrue\onecolumn
@@ -115,6 +121,7 @@
   \chapter*{\listfigurename}%
   \if@restonecol\twocolumn\fi
 }
+\makeatother
 
 %using \imagetoc and \imagelof
 % \imagetoc{contents}

@@ -4,12 +4,26 @@
 
 \RequirePackage{lettrine}
 \RequirePackage{xparse}
-
+\RequirePackage{stackengine}
 
 \NewDocumentCommand{\setdropcaps}{m}
 {
 	\renewcommand{\LettrineFontHook}{\fontspec{#1}}
 }
+
+\newsavebox\gravebox
+\savebox\gravebox{\smash{\scalebox{3}[1]{$\grave{ }$}}}
+\newsavebox\primebox
+\savebox\primebox{\smash{\scalebox{3}[1]{$\prime$}}}
+\newsavebox\circbox
+\savebox\circbox{\smash{\scalebox{1.3}[1.3]{$\circ$}}}
+\newcommand\accentletter[2][\primebox]{\stackon[1pt]{#2}{\usebox{#1}}}
+
+% \newunicodechar{́}{{\normalfont ́}}
+% %\newunicodechar{̀}{{\normalfont ̀}}
+% \newunicodechar{̀}{{\normalfont ̀}}
+
+\setcounter{DefaultLines}{4}
 
 \makeatletter
 \newcount\zzc

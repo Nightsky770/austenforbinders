@@ -17,11 +17,16 @@
 \RequirePackage{ebgaramond} 
 \RequirePackage{ellipsis}
 \RequirePackage{pdfpages}
-%\RequirePackage{verse}
+\RequirePackage{verse}
 \RequirePackage{epigraph}
 \RequirePackage{comment}
 \RequirePackage{etoolbox}
+\RequirePackage{soul}
+\RequirePackage{enumitem}
+\RequirePackage{needspace}
+\RequirePackage[shortcuts]{extdash}
 
+\setlist[description]{font=\normalfont\bfseries}
 
 \KOMAoption{BCOR}{7mm}
 \KOMAoption{twoside}{true}
@@ -39,13 +44,31 @@
 
 \newcommand*\hideentrynumber[1]{}
 
-
-\MakeAutoQuote{»}{«}
+\MakeOuterQuote{"}
+\MakeAutoQuote{<}{>}
 \catcode`\—=13
 \protected\def—{\textemdash\allowbreak}
 \newcommand\longdash{\mbox{---\,}\ignorespaces{}} %corrects issue with lines breaking between dash and end quote
 
-\newcommand{\HUGE}{\fontsize{30}{40}\selectfont}
+%French improvements
+\newenvironment{conversation}{%
+  \par\openautoquote\nobreak\ignorespaces%
+}{%
+  \par\closeautoquote\par%
+}
+
+\newcommand{\speak}{%
+  \par\noindent\textemdash~\ignorespaces}
+%end of French improvements
+
+
+\newcommand{\divider}{%
+  \par\vspace{0.5em}%
+  \noindent\hfil\rule{0.5\textwidth}{.4pt}\hfil%
+  \par\vspace{0.5em}%
+}
+
+\newcommand{\HUGE}{\fontsize{30}{30}\selectfont}
 \newcommand{\resetchapskip}{\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}}}
 
 \setmainfont{EB Garamond}[UprightFeatures={CharacterVariant=11}]
@@ -102,6 +125,9 @@
   \endgroup
 }
 
-
+\patchcmd\@part
+  {\thepart\hspace{1em}}
+  {\HUGE\bfseries{\partname}\ \thepart\hspace{1em}}
+  {}{}
 
   \makeatother

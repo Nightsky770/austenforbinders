@@ -1,12 +1,28 @@
 \documentclass[
-%paper=5.5in:8.5in,
-a5paper,
+paper=5.5in:8.5in,
+%a5paper,
 ]{scrbook} 
 
 \usepackage{bindery}
 \usepackage{illustrations}
 \usepackage{dropcaps}
+\usepackage{artheadings}
+\usepackage{epistolary}
 
+
+\makeatletter
+\@ifundefined{ifpictures}{\newif\ifpictures}{}
+\makeatother
+\picturestrue
+%\picturesfalse
+
+\ifpictures
+    \includecomment{pictures}
+    \excludecomment{placeholder}
+\else
+    \excludecomment{pictures}
+    \includecomment{placeholder}
+\fi
 
 \renewcommand{\thechapter}{\Roman{chapter}}
 
@@ -36,9 +52,15 @@ a5paper,
 
 \clearpage
 \KOMAoptions{headings=openleft}
-\includepdf[width=.5\textwidth]{halftitle.png}
- \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=1.1\textwidth]{frontispiece.png}
- \includepdf[addtolist={1,figure,Title Page,titlepage},width=1.2\textwidth]{titlepage.jpg}
+\includepdf[width=.5\textwidth]{halftitle.jpg}
+\begin{letter}
+ \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=1.1\textwidth]{frontispiece.jpg}
+ \includepdf[addtolist={1,figure,Title Page,titlepage},width=1.2\textwidth]{titlepage1.jpg}
+\end{letter}
+\begin{a4}
+  \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=\textwidth]{frontispiece.jpg}
+  \includepdf[addtolist={1,figure,Title Page,titlepage},width=1.1\textwidth]{titlepage1.jpg}
+\end{a4}
 
 \renewcommand*{\chaptermarkformat}{}
 \renewcommand*{\chapterheadendvskip}{\vspace{0pt}}
@@ -47,8 +69,8 @@ a5paper,
 \pagestyle{plain}
 
 
-\imagetoc{contents}
-\imagelof{illustrations}{List of Illustrations}
+\imagetoc{contents}{1.0}
+\imagelof{illustrations}{List of Illustrations}{1.0}
 \tableofcontents
 
 \cleardoubleevenpage
@@ -138,7 +160,7 @@ a5paper,
 \end{figure}
 \vfill
 \begin{minipage}{\textwidth}
-\textit{Pride \& Prejudice} was first published in January 1813 by T. Egerton, Whitehall, credited only to »the Author of \textit{Sense \& Sensibility}« (which had been published in 1811, credited to »a Lady«). It was not republished under Jane Austen's (1775\textendash1817) own name until after her death. Illustrations by Hugh Thomson (1860\textendash1920) are from the 1894 edition published by George Allen in London (UK). Grateful acknowledgment is made to the Internet Archive, which in 2007 digitised a copy of this edition belonging to the New York Public Library.
+\textit{Pride \& Prejudice} was first published in January 1813 by T. Egerton, Whitehall, credited only to <the Author of \textit{Sense \& Sensibility}> (which had been published in 1811, credited to <a Lady>). It was not republished under Jane Austen's (1775--1817) own name until after her death. Illustrations by Hugh Thomson (1860--1920) are from the 1894 edition published by George Allen in London (UK). Grateful acknowledgment is made to the Internet Archive, which in 2007 digitised a copy of this edition belonging to the New York Public Library.
 \end{minipage}
 \vfill
 gutenberg.org/ebooks/1342\\archive.org/details/prideprejudice00aust
@@ -146,7 +168,7 @@ gutenberg.org/ebooks/1342\\archive.org/details/prideprejudice00aust
 \includegraphics[width=.4\textwidth]{flourish}
 \vfill
 \begin{minipage}{\textwidth}
-EB Garamond is Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. This digital version reproduces the original design by Claude Garamont closely: the source for the letterforms is a scan of a specimen known as the \enquote{Berner specimen,} which was composed in 1592 by Conrad Berner, the son-in-law of Christian Egenolff and his successor at the Egenolff print office.
+Text is set in <EB Garamond,> Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. This digital version reproduces the original design by Claude Garamont closely: the source for the letterforms is a scan of a specimen known as the \enquote{Berner specimen,} which was composed in 1592 by Conrad Berner, the son-in-law of Christian Egenolff and his successor at the Egenolff print office.
 \end{minipage}
 \vfill
 github.com/georgd/EB-Garamond
