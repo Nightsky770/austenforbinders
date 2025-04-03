@@ -1,38 +1,26 @@
 \documentclass[
-%a5paper,
-paper=5.5in:8.5in,
+a5paper,
+%paper=5.5in:8.5in,
 ]{scrbook} 
 
-\usepackage{bindery}
+
+\title{Emma}
+
+\usepackage[romanChapters]{bindery}
 \usepackage{dropcaps}
 \usepackage{illustrations}
-\usepackage{denseromantoc}
-\usepackage{verse}
+\usepackage{epistolary}
+
 
 \setdropcaps{FloralCapsNouveau.ttf}
 
 \renewfontfamily\chapterfont{Amarante-Regular.ttf}
 
-\renewcommand{\thechapter}{\Roman{chapter}}
-
-
-%\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
-%\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{tocline}{figure}
-
-
-\automark{chapter}
-\lehead{Emma}
-\rohead{Chapter \arabic{chapter}}
-
-\flushbottom
-
-
 \hyphenation{}
 
 \begin{document}
 \frontmatter
-\includepdf[width=1.2\textwidth]{emmatitle.png}
-
+\includepdf[width=\coverwidth]{emmatitle.png}
 
 \pagestyle{plain}
 
@@ -44,18 +32,19 @@ paper=5.5in:8.5in,
 \tableofcontents
 
 
-\renewcommand{\listfigurename}{List of Illustrations}
+\renewcommand{\listfigurename}{List of Illustrations} %shouldn't be needed - fix
+
 \listoffigures
 \thispagestyle{plain} %this should not be necessary--fix
 
-\makeatletter
-\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}} %reset vskip to default after scootching up TOC header
-\makeatother
+
+\resetchapskip
+
 
 \pagestyle{headings}
 \renewcommand*{\chapterpagestyle}{plain}
-\newcommand{\moderatelyhuge}{\fontsize{40}{50}\selectfont}
-\RedeclareSectionCommand[afterskip=1.5cm]{chapter}
+%\newcommand{\moderatelyhuge}{\fontsize{40}{50}\selectfont}
+%\RedeclareSectionCommand[afterskip=1.5cm]{chapter}
 
 
 \KOMAoptions{headings=openright}
@@ -127,7 +116,7 @@ paper=5.5in:8.5in,
 \centering
 
 \begin{minipage}{\textwidth}
-\textit{Emma} was first published in December 1815 by John Murray, credited only to »the Author of \textit{Pride \& Prejudice}«. It was not republished under Jane Austen's (1775\textendash1817) own name until after her death. Illustrations by Hugh Thomson (1860\textendash1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK). Grateful acknowledgement is made to the Internet Archive, which in 2008 digitised a copy of this edition belonging to the University of California.
+\textit{Emma} was first published in December 1815 by John Murray, credited only to <the Author of \textit{Pride \& Prejudice}>. It was not republished under Jane Austen's (1775--1817) own name until after her death. Illustrations by Hugh Thomson (1860--1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK). Grateful acknowledgement is made to the Internet Archive, which in 2008 digitised a copy of this edition belonging to the University of California.
 \end{minipage}
 \vfill
 gutenberg.org/ebooks/158
@@ -135,7 +124,7 @@ gutenberg.org/ebooks/158
 \includegraphics[width=.4\textwidth]{flourish}
 \vfill
 \begin{minipage}{\textwidth}
-Main text is set in »EB Garamond«, Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. Chapter headings are set in »Amarante«, by Karolina Lach. Dropcaps are set in »Floral Caps Nouveau«, by George Williams. Title page is set in »Bolton« and »Bolton Titling«, by Paul Lloyd.
+Main text is set in <EB Garamond>, Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. Chapter headings are set in <Amarante>, by Karolina Lach. Dropcaps are set in <Floral Caps Nouveau>, by George Williams. Title page is set in <Bolton> and <Bolton Titling>, by Paul Lloyd.
 \end{minipage}
 \vfill
 github.com/georgd/EB-Garamond\\
@@ -146,7 +135,7 @@ moorstation.org/typoasis/designers/lloyd/
 \includegraphics[width=.4\textwidth]{flourish}
 \vfill
 \begin{minipage}{\textwidth}
-Title page decoration is by Dutch artist Willem Wenckebach (1860\textendash1937). The original is held by the Rijksmuseum in Amsterdam. Last page decoration is from a 1912 issue of the German magazine \textit{Velhagen \& Kasings Monatshefte}, held and digitised by the University of Illinois at Urbana-Champaign.
+Title page decoration is by Dutch artist Willem Wenckebach (1860--1937). The original is held by the Rijksmuseum in Amsterdam. Last page decoration is from a 1912 issue of the German magazine \textit{Velhagen \& Kasings Monatshefte}, held and digitised by the University of Illinois at Urbana-Champaign.
 \end{minipage}
 \vfill
 \includegraphics[width=.4\textwidth]{flourish}

@@ -1,25 +1,42 @@
-\usepackage{xcolor}
-\usepackage{fontspec}
-\usepackage[T1]{fontenc} % International character encodings
-\usepackage{makeidx}
-\usepackage{scrlayer-scrpage}
-\usepackage{pifont}
-\usepackage[maxlevel=3,autostyle]{csquotes}
-\usepackage[export]{adjustbox}
-\usepackage{polyglossia}
-\usepackage{afterpage}
-\usepackage{microtype}
-\usepackage{tocbasic}
-\usepackage[pass]{geometry}
-\usepackage{subfiles}
-\usepackage[all,defaultlines=2]{nowidow}
-\usepackage{setspaceenhanced}
-\usepackage{ebgaramond} 
-\usepackage{ellipsis}
-\usepackage{pdfpages}
-\usepackage{verse}
-\usepackage{epigraph}
-\usepackage{comment}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bindery}
+
+\RequirePackage{xcolor}
+\RequirePackage{fontspec}
+\RequirePackage[T1]{fontenc} % International character encodings
+\RequirePackage{makeidx}
+\RequirePackage{scrlayer-scrpage}
+\RequirePackage{pifont}
+\RequirePackage[maxlevel=3,autostyle]{csquotes}
+\RequirePackage[export]{adjustbox}
+\RequirePackage{polyglossia}
+\RequirePackage{afterpage}
+\RequirePackage{microtype}
+\RequirePackage{tocbasic}
+\RequirePackage[pass]{geometry}
+\RequirePackage{subfiles}
+\RequirePackage[all,defaultlines=2]{nowidow}
+\RequirePackage{setspaceenhanced}
+\RequirePackage{ebgaramond} 
+\RequirePackage{ellipsis}
+\RequirePackage{pdfpages}
+\RequirePackage{verse}
+\RequirePackage{epigraph}
+\RequirePackage{comment}
+\RequirePackage{etoolbox}
+\RequirePackage{soul}
+\RequirePackage{enumitem}
+\RequirePackage{needspace}
+\RequirePackage[shortcuts]{extdash}
+\RequirePackage{kvoptions}
+
+\makeatletter
+\DeclareBoolOption{namedChapters}
+\DeclareBoolOption{romanChapters}
+\DeclareStringOption[\normalfont]{chapterfont}
+\DeclareStringOption[]{worktitle}
+\ProcessKeyvalOptions*
+
 
 \KOMAoption{BCOR}{7mm}
 \KOMAoption{twoside}{true}
@@ -29,20 +46,36 @@
 \KOMAoption{headings}{big}
 \KOMAoption{numbers}{noenddot}
 \KOMAoption{listof}{flat,nochaptergap}
+\KOMAoption{toc}{listof}
+
+%Misc setup
+\setlist[description]{font=\normalfont\bfseries}
 
 \renewcommand\raggedsection{\centering} %always center chapter heads
 
-\graphicspath{ {./images/} }
+\graphicspath{ {./images/} } %default location for pictures
 
-\MakeAutoQuote{»}{«}
+
+%\MakeOuterQuote{"}
+\MakeAutoQuote{<}{>}
 \catcode`\—=13
-\protected\def—{\textemdash}
+\protected\def—{\textemdash\allowbreak}
 \newcommand\longdash{\mbox{---\,}\ignorespaces{}} %corrects issue with lines breaking between dash and end quote
+\newcommand\doubleemdash{⸺}
 
-\newcommand{\HUGE}{\fontsize{30}{40}\selectfont}
 
 
-\setmainfont{EB Garamond}[UprightFeatures={CharacterVariant=11}]
+
+\newcommand{\divider}{%
+  \par\vspace{0.5em}%
+  \noindent\hfil\rule{0.5\textwidth}{.4pt}\hfil%
+  \par\vspace{0.5em}%
+}
+
+\newcommand{\HUGE}{\fontsize{30}{30}\selectfont}
+\newcommand{\resetchapskip}{\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}}}
+
+\setmainfont{EB Garamond}[UprightFeatures={CharacterVariant=11}] %for some reason, EB Garamond uses a weird "I" glyph for "1". Use variant form for normal looking "1". 
 \setdefaultlanguage[variant=uk]{english}
 \addtokomafont{disposition}{\normalfont}
 \newfontfamily\chapterfont{EB Garamond} %might override this later
@@ -56,20 +89,196 @@
 
 \flushbottom
 
-\newcommand*\hideentrynumber[1]{}
-
 \setlength{\epigraphwidth}{0.8\textwidth}
 \renewcommand{\epigraphflush}{center}
 \renewcommand{\sourceflush}{center}
 
-\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%% Chapter marking setup %%%%%%%%%%%%%%%%%%%%%
+
+\automark{chapter}
+
+\def\bindery@title{}
+
+\newcommand{\setworktitle}[1]{%
+  \def\bindery@title{#1}%
+}
+
+% Command to setup all the headers
+\newcommand{\setupheaders}{%
+  % Check if a title is manually set via \setworktitle
+  \ifx\bindery@title\@empty
+    % If not, check if we have a document title
+    \@ifundefined{@title}{%
+      \lehead{}% Fallback if no title is defined
+    }{%
+      \lehead{\@title}% Use document title from \title command
+    }%
+  \else
+    \lehead{\bindery@title}% Use manually set title
+  \fi
+  
+  % Handle chapter marks based on options
+  \ifbindery@namedChapters
+    \ifbindery@romanChapters
+		% Roman numerals for chapters: TRUE; chapters have titles: TRUE
+		% "Chapter V: My Adventure Continues"
+		\renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \arabic{chapter}:\ ##1}{}%
+      }
+    \else
+       % Roman numerals for chapters: FALSE; chapters have titles: TRUE
+		% "Chapter 2: Stuff Happens"
+      \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \thechapter:\ ##1}{}%
+      }
+    \fi
+  \else
+    \ifbindery@romanChapters
+		% Roman numerals for chapters: TRUE; chapters have titles: FALSE
+		% "Chapter XLIX"
+		\renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \arabic{chapter}}{}%
+      }
+    \else
+      % Roman numerals for chapters: FALSE; chapters have titles: FALSE
+      % "Chapter 3"
+      \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \thechapter}{}%
+      }
+    \fi
+  \fi
+  
+  % Set right header on odd pages to chapter info
+  \rohead{\leftmark}
+}
+
+%%%%%%%%%%%%%%%%%%%%% Table of Contents setup %%%%%%%%%%%%%%%%%%%%
+
+\newcommand*\hideentrynumber[1]{}
+
+
+\newcommand{\setuptocentries}{%
+  \ifbindery@namedChapters
+    \ifbindery@romanChapters
+    % Roman numerals for chapters: TRUE; chapters have titles: TRUE
+    % "Chapter V: My Adventure Continues"
+      \renewcommand{\thechapter}{\Roman{chapter}}
+      \DeclareTOCStyleEntry[
+        dynnumwidth=true,
+        linefill=\TOCLineLeaderFill,
+        indent=0pt,
+        beforeskip=0.3em,
+        entryformat=\bindery@chapterfont,
+        pagenumberformat=\bindery@chapterfont
+      ]{tocline}{chapter}
+    \else
+    % Roman numerals for chapters: FALSE; chapters have titles: TRUE
+    % "Chapter 2: Stuff Happens"
+      \DeclareTOCStyleEntry[
+        numwidth=2.3em,
+        linefill=\TOCLineLeaderFill,
+        indent=0pt,
+        beforeskip=0.5em,
+        entryformat=\bindery@chapterfont,
+        pagenumberformat=\bindery@chapterfont
+      ]{tocline}{chapter}
+    \fi
+  \else
+    % Roman numerals for chapters: TRUE; chapters have titles: FALSE
+    % "Chapter XLIX"
+    \ifbindery@romanChapters
+      \renewcommand{\thechapter}{\Roman{chapter}}
+      \DeclareTOCStyleEntry[
+        dynnumwidth=true,
+        linefill=\TOCLineLeaderFill,
+        indent=0pt,
+        beforeskip=0.2em,
+        entryformat=\bindery@chapterfont,
+        pagenumberformat=\bindery@chapterfont,
+        entrynumberformat=\hideentrynumber
+      ]{tocline}{chapter}
+    \else
+      % Roman numerals for chapters: FALSE; chapters have titles: FALSE
+      % "Chapter 3"
+      \DeclareTOCStyleEntry[
+        numwidth=2.3em,
+        linefill=\TOCLineLeaderFill,
+        indent=0pt,
+        beforeskip=0.5em,
+        entryformat=\bindery@chapterfont,
+        pagenumberformat=\bindery@chapterfont
+		entrynumberformat=\hideentrynumber
+      ]{tocline}{chapter}
+    \fi
+  \fi
+  
+  \DeclareTOCStyleEntry[
+    numwidth=2.3em,
+    linefill=\TOCLineLeaderFill,
+    indent=0pt,
+    beforeskip=1.0em,
+    entryformat=\bindery@chapterfont,
+    pagenumberformat=\bindery@chapterfont
+  ]{tocline}{section}
+}
+
+% Apply the setup at \begin{document}
+\AtBeginDocument{%
+  % First check if the worktitle option was set and apply it
+  \@ifundefined{bindery@worktitle@}{}{%
+    \setworktitle{\bindery@worktitle@}%
+  }
+
+  % Then set up the TOC and headers
+  \setuptocentries
+  \setupheaders
+}
+
+% Configure basic TOC appearance
+\DeclareTOCStyleEntry[
+  numwidth=2.3em,
+  linefill=\TOCLineLeaderFill,
+  indent=0pt,
+  beforeskip=1.0em
+]{tocline}{chapter}
+
+% Consistent TOC for front matter
+\renewcommand{\listoffigures}{%
+  \cleardoublepage
+  \chapter*{\listfigurename}
+  \addcontentsline{toc}{chapter}{\listfigurename}
+  \@starttoc{lof}
+}
+
+\newcommand{\oldmoney}[3]{%
+  \ifnum#1>0
+    {\pounds}#1%
+    \ifnum#2>0\,#2\textit{s}.\fi
+    \ifnum#3>0\,#3\textit{d}.\fi
+  \else
+    \ifnum#2>0
+      #2\textit{s}.%
+      \ifnum#3>0\,#3\textit{d}.\fi
+    \else
+      \ifnum#3>0
+        #3\textit{d}.%
+      \else
+        0\textit{d}.%
+      \fi
+    \fi
+  \fi
+}
+
 \@ifclasswith{scrbook}{a5paper}
 {%
-	\includecomment{a4}
-	\excludecomment{letter}
+  \includecomment{a4}
+  \excludecomment{letter}
+  \newcommand{\coverwidth}{1.1\textwidth}
 }{%
-	\excludecomment{a4}
-	\includecomment{letter}
+  \excludecomment{a4}
+  \includecomment{letter}
+  \newcommand{\coverwidth}{1.2\textwidth}
 }
 
 \newcommand{\headlesschapter}[1]{%just in case we need to suppress the chapter head
@@ -78,4 +287,10 @@
   \chapter{#1}
   \endgroup
 }
+%Ugly kludge to get "Part N" in great big type on its own page
+\patchcmd\@part
+  {\thepart\hspace{1em}}
+  {\HUGE\bfseries{\partname}\ \thepart\hspace{1em}}
+  {}{}
+
 \makeatother
