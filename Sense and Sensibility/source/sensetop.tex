@@ -1,74 +1,56 @@
 \documentclass[
-a5paper,
-%paper=5.5in:8.5in,
+%a5paper,
+paper=5.5in:8.5in,
 ]{scrbook} 
-\usepackage{bindery}
+
+
+\title{Sense \& Sensibility}
+
+
+\usepackage[romanChapters]{bindery}
 \usepackage{dropcaps}
+\usepackage{epistolary}
 \usepackage{illustrations}
-\usepackage{denseromantoc}
+
 
 \renewfontfamily\chapterfont{Amarante-Regular.ttf}
 \setdropcaps{FloralCapsNouveau.ttf}
 
 
-\setkomafont{chapter}{\chapterfont\Huge}
-
-\automark{chapter}
-\lehead{Sense \& Sensibility}
-\rohead{Chapter \arabic{chapter}}
-%\raggedbottom
-\flushbottom
-
+\BeforeTOCHead[toc]{%
+  \KOMAoptions{parskip=false}% no parskip in ToC
+  \RedeclareSectionCommand[afterskip=1em]{chapter}% 
+}
+\BeforeTOCHead[tocline]{%
+  \KOMAoptions{parskip=false,numwidth=0}% no parskip in ToC
+  \RedeclareSectionCommand[afterskip=1em]{chapter}% 
+}
+\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
+\DeclareTOCStyleEntry[beforeskip=.15cm,numwidth=0pt,entrynumberformat=\hideentrynumber]{tocline}{figure}
 
 \hyphenation{Dash-wood El-i-nor Mar-i-anne}
 
 \begin{document}
 \frontmatter
 
+ \includepdf[width=\coverwidth]{titlepage.jpg}
+	
 
-\begin{titlepage}
-\begin{a4}
- \begin{center}
-   \vfill
-	\begin{tikzpicture}[remember picture, overlay]  
-		\node (frame) at ($(current page.north)+(0cm,-10.5cm)$) {\includegraphics[width=1.22\linewidth]{roycroft}};
-		\node (snstitle) at ($(current page.north)+(0cm,-6.5cm)$) {\includegraphics[width=.75\linewidth]{snstitle}};
-		\node (by) at ($(current page.north)+(0cm,-9.7cm)$) {\includegraphics[width=.06\linewidth]{by}};
-		\node (author) at ($(current page.north)+(0cm,-11cm)$) {\includegraphics[width=.7\linewidth]{authorja}};
-		\node (illus) at ($(current page.north)+(0cm,-13.5cm)$) {\includegraphics[width=.6\linewidth]{illusht}};
-	\end{tikzpicture}
-	\vfill
- 	\end{center}
-\end{a4}
-
-\begin{letter}
- \begin{center}
-   \vfill
-	\begin{tikzpicture}[remember picture, overlay]  
-		\node (frame) at ($(current page.north)+(0cm,-11cm)$) {\includegraphics[width=1.22\linewidth]{roycroft}};
-		\node (snstitle) at ($(current page.north)+(0cm,-7cm)$) {\includegraphics[width=.75\linewidth]{snstitle}};
-		\node (by) at ($(current page.north)+(0cm,-10.2cm)$) {\includegraphics[width=.06\linewidth]{by}};
-		\node (author) at ($(current page.north)+(0cm,-11.5cm)$) {\includegraphics[width=.7\linewidth]{authorja}};
-		\node (illus) at ($(current page.north)+(0cm,-14cm)$) {\includegraphics[width=.6\linewidth]{illusht}};
-	\end{tikzpicture}
-	\vfill
- 	\end{center}
-\end{letter}
-
-\end{titlepage}		
-
-\pagestyle{plain}
 
 \KOMAoptions{headings=openleft}
-
-\renewcommand{\contentsname}{\includegraphics[width=.45\linewidth]{contents}}
+\pagestyle{plain}
+\let\originalheadstartvskip=\chapterheadstartvskip
+\renewcommand*{\chapterheadstartvskip}{\vspace*{-0em}}  % Adjust value as needed
+\imagetoc{contents}{0.5}
 \tableofcontents
+\let\chapterheadstartvskip=\originalheadstartvskip
 
+\pagestyle{plain}
+\imagelof{listofillus}{List of Illustrations}{0.6}
 
-\renewcommand{\listfigurename}{\includegraphics[width=.45\linewidth]{listofillus}}
-%\renewcommand{\listfigurename}{List of Illustrations}
 \listoffigures
 \thispagestyle{plain} %this should not be necessary--fix
+
 
 \pagestyle{headings}
 \renewcommand*{\chapterpagestyle}{plain}
@@ -145,7 +127,7 @@ a5paper,
 \centering
 \vfill
 \begin{minipage}{\textwidth}
-\textit{Sense \& Sensibility} was originally published in 1811 by Thomas Egerton in London (UK), credited only to »a Lady.« It was not republished under Jane Austen's (1775\textendash1817) own name until after her death. Illustrations by Irish artist Hugh Thomson (1860\textendash1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK).
+\textit{Sense \& Sensibility} was originally published in 1811 by Thomas Egerton in London (UK), credited only to <a Lady.> It was not republished under Jane Austen's (1775--1817) own name until after her death. Illustrations by Irish artist Hugh Thomson (1860--1920) are from the 1896 edition published by Macmillan and Co., Ltd., in London (UK).
 \end{minipage}
 \vfill
 gutenberg.org/ebooks/161
@@ -153,7 +135,7 @@ gutenberg.org/ebooks/161
 \includegraphics[width=.4\textwidth]{flourish}
 \vfill
 \begin{minipage}{\textwidth}
-Main text is set in »EB Garamond«, Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. This digital version reproduces the original design by Claude Garamont closely: the source for the letterforms is a scan of a specimen known as the \enquote{Berner specimen,} which was composed in 1592 by Conrad Berner, the son-in-law of Christian Egenolff and his successor at the Egenolff print office. Chapter headings are set in »Amarante«, by Karolina Lach. Dropcaps are set in »Floral Caps Nouveau«, by George Williams. 
+Main text is set in <EB Garamond>, Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. Chapter headings are set in <Amarante>, by Karolina Lach. Dropcaps are set in <Floral Caps Nouveau>, by George Williams. 
 \end{minipage} 
 \vfill
 github.com/georgd/EB-Garamond\\
