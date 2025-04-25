@@ -1,0 +1,63 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dropcaps}
+
+
+\RequirePackage{lettrine}
+\RequirePackage{xparse}
+\RequirePackage{stackengine} %for accent support
+
+\setcounter{DefaultLines}{4}
+
+\NewDocumentCommand{\setdropcaps}{m}
+{
+	\renewcommand{\LettrineFontHook}{\fontspec{#1}}
+}
+
+
+%%%%%%%%%%%%%%%% Accented character support %%%%%%%%%%%%%%%%%%
+% Supports acute accent, grave accent, circumflex accent.
+% Usage: \lettrine{\accentletter[\gravebox]{A}}{} produces a capital A dropcap with a grave accent (in whatever the default font is--EB Garamond for me, ususally) hovering over it like a hat. \primebox or \circbox in place of \gravebox would instead produce an acute or circumflex accent, respectively.
+\newsavebox\gravebox
+\savebox\gravebox{\smash{\scalebox{3}[1]{$\grave{ }$}}}
+\newsavebox\primebox
+\savebox\primebox{\smash{\scalebox{3}[1]{$\prime$}}}
+\newsavebox\circbox
+\savebox\circbox{\smash{\scalebox{1.3}[1.3]{$\circ$}}}
+\newcommand\accentletter[2][\primebox]{\stackon[1pt]{#2}{\usebox{#1}}}
+
+% \newunicodechar{́}{{\normalfont ́}}
+% %\newunicodechar{̀}{{\normalfont ̀}}
+% \newunicodechar{̀}{{\normalfont ̀}}
+%%%%%%%%%%%%%%%%% end of accented character support %%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%% This is dark magic that I found on the internet and do not 100% understand, and therefore can't improve upon. If you are using dropcaps and the first paragraph of your chapter is very short and doesn't fill up the text space to the right of the dropcap, Lettrine will indent the next paragraph relative to the regular left text margin--usually overlapping the dropcap and rendering it illegible. To correct this, precede each short paragraph with a \zz:
+%\lettrine{I}{} thought about it.
+%
+%\zz
+%<Baloney,> I said.
+%
+%\zz
+%<What?!> he replied.
+% There is no benefit to having superfluous \zz'd paragraphs, so just do the ones you need.
+
+\makeatletter
+\newcount\zzc
+
+
+\def\zz{%
+\ifnum\prevgraf<\c@L@lines
+\zzc\z@
+\loop
+\ifnum\zzc<\prevgraf
+\advance\zzc\@ne
+\afterassignment\zzda\count@\L@parshape\relax
+\repeat
+\parshape\L@parshape
+\fi}
+\def\zzda{\afterassignment\zzdb\dimen@}
+\def\zzdb{\afterassignment\zzdef\dimen@}
+\def\zzdef#1\relax{\edef\L@parshape{\the\numexpr\count@-1\relax\space #1}}
+\makeatother
+
+

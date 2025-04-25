@@ -1,0 +1,134 @@
+\documentclass[
+paper=5.5in:8.5in,
+%a5paper,
+]{scrbook} 
+
+\title{Lady Susan}
+
+
+\usepackage[namedChapters]{bindery}
+\usepackage{dropcaps}
+\usepackage{epistolary}
+\setdropcaps{EBGaramond-Initials.otf}
+%\renewfontfamily\chapterfont{CATChilds.ttf}
+\renewcommand\chaptername{Letter}
+
+%\BeforeTOCHead[toc]{%
+%%  \KOMAoptions{parskip=false}% no parskip in ToC
+%  \RedeclareSectionCommand[afterskip=1em]{chapter}% 
+%}
+
+\DeclareTOCStyleEntry[beforeskip=.15cm,linefill=\TOCLineLeaderFill]{chapter}{chapter}
+
+\AtBeginDocument{%
+  \rohead{Lady Susan}
+}
+
+\hyphenation{Dar-cy Ben-net Bing-ley Lu-cas Mery-ton Eliz-a-beth Wick-ham Col-lins}
+
+\begin{document}
+
+\frontmatter
+\pagestyle{empty}
+ 
+ \includepdf[width=\coverwidth]{titlepage.jpg}
+
+\KOMAoptions{headings=openleft}
+\pagestyle{plain}
+
+
+\tableofcontents
+
+ 
+\mainmatter
+\pagestyle{headings}
+\KOMAoptions{headings=openright}
+
+\include{chapters/01.tex}
+\include{chapters/02.tex}
+\include{chapters/03.tex}
+\include{chapters/04.tex}
+\include{chapters/05.tex}
+\include{chapters/06.tex}
+\include{chapters/07.tex}
+\include{chapters/08.tex}
+\include{chapters/09.tex}
+\include{chapters/10.tex}
+\include{chapters/11.tex}
+\include{chapters/12.tex}
+\include{chapters/13.tex}
+\include{chapters/14.tex}
+\include{chapters/15.tex}
+\include{chapters/16.tex}
+\include{chapters/17.tex}
+\include{chapters/18.tex}
+\include{chapters/19.tex}
+\include{chapters/20.tex}
+\include{chapters/21.tex}
+\include{chapters/22.tex}
+\include{chapters/23.tex}
+\include{chapters/24.tex}
+\include{chapters/25.tex}
+\include{chapters/26.tex}
+\include{chapters/27.tex}
+\include{chapters/28.tex}
+\include{chapters/29.tex}
+\include{chapters/30.tex}
+\include{chapters/31.tex}
+\include{chapters/32.tex}
+\include{chapters/33.tex}
+\include{chapters/34.tex}
+\include{chapters/35.tex}
+\include{chapters/36.tex}
+\include{chapters/37.tex}
+\include{chapters/38.tex}
+\include{chapters/39.tex}
+\include{chapters/40.tex}
+\include{chapters/41.tex}
+\include{chapters/42.tex}
+
+
+
+\KOMAoptions{headings=openright}
+
+
+\KOMAoptions{headings=openleft}
+
+\centering
+\chapter*{Colophon}
+
+\vfill
+\begin{minipage}{\textwidth}
+\textit{Lady Susan} may have been written as early as the mid-1790s, but Jane Austen (1775--1817) never submitted it for publication. It was not published until 1871, when her nephew James Edward Austen-Leigh (1798--1874) included it in the second edition of his \textit{Memoir of Jane Austen}.
+\end{minipage}
+\vfill
+gutenberg.org/ebooks/946
+\vfill
+\rule{0.5\textwidth}{.4pt}
+\vfill
+\begin{minipage}{\textwidth}
+Text is set in <EB Garamond,> Georg Mayr-Duffner's free and open source implementation of Claude Garamond’s famous humanist typefaces from the mid-sixteenth century. This digital version reproduces the original design by Claude Garamont closely: the source for the letterforms is a scan of a specimen known as the \enquote{Berner specimen,} which was composed in 1592 by Conrad Berner, the son-in-law of Christian Egenolff and his successor at the Egenolff print office.
+
+Title page is set in <Colwell,> by Apostrophic Labs, based on a sample of hand lettering from 1916.
+\end{minipage}
+\vfill
+github.com/georgd/EB-Garamond\\moorstation.org/typoasis/designers/lab/
+\vfill
+\rule{0.5\textwidth}{.4pt}
+\vfill
+\begin{minipage}{\textwidth}
+Title page decoration is by Dutch artist Willem Wenckebach (1860--1937), circa 1896. The original is held by the Rijksmuseum in Amsterdam.
+\end{minipage}
+\vfill
+\rule{0.5\textwidth}{.4pt}
+\vfill
+\begin{minipage}{\textwidth}
+This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed: creativecommons.org/publicdomain/zero/1.0/\\
+\end{minipage}
+\vfill
+\rule{0.5\textwidth}{.4pt}
+\vfill
+Typeset in \LaTeX{}. Last revised \today.
+\vfill
+\thispagestyle{empty}
+\end{document}
