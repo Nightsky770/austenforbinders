@@ -1,0 +1,328 @@
+\RequirePackage{xcolor}
+\RequirePackage[verbose]{polyglossia}
+\RequirePackage{fontspec}
+\RequirePackage[T1]{fontenc} % International character encodings
+\RequirePackage{makeidx}
+\RequirePackage{scrlayer-scrpage}
+\RequirePackage{pifont}
+\RequirePackage[maxlevel=3,autostyle]{csquotes}
+\RequirePackage[export]{adjustbox}
+\RequirePackage{afterpage}
+\RequirePackage{microtype}
+\RequirePackage{tocbasic}
+\RequirePackage[pass]{geometry}
+\RequirePackage{subfiles}
+\RequirePackage[all,defaultlines=2]{nowidow}
+\RequirePackage{setspaceenhanced}
+\RequirePackage[lining]{ebgaramond} 
+\RequirePackage{ellipsis}
+\RequirePackage{pdfpages}
+\RequirePackage{verse}
+\RequirePackage{epigraph}
+\RequirePackage{environ}
+\RequirePackage{etoolbox}
+\RequirePackage{soul}
+\RequirePackage{enumitem}
+\RequirePackage{needspace}
+\RequirePackage[shortcuts]{extdash} %Allows for auto-breaks at hyphens: Lud\-/in\-/the\-/Mist
+
+
+\KOMAoption{BCOR}{7mm}
+\KOMAoption{twoside}{true}
+\KOMAoption{DIV}{calc}
+\KOMAoption{usegeometry}{true}
+\KOMAoption{chapterprefix}{true}
+\KOMAoption{headings}{big,optiontoheadandtoc}
+\KOMAoption{numbers}{noenddot}
+\KOMAoption{listof}{flat,nochaptergap,totoc}
+\KOMAoption{toc}{listof}
+
+
+\newif\ifbindery@namedChapters
+\newif\ifbindery@romanChapters  
+\newif\ifbindery@shortStories
+\def\bindery@chapterfont{\normalfont}
+\def\bindery@workTitle{}
+
+\DeclareOption{namedChapters}{\bindery@namedChapterstrue}
+\DeclareOption{romanChapters}{\bindery@romanChapterstrue}
+\DeclareOption{shortStories}{\bindery@shortStoriestrue}
+\DeclareOption*{\PackageWarning{bindery}{Unknown option '\CurrentOption'}}
+\ProcessOptions\relax
+
+% Now do the paper size selection and other @ code
+\makeatletter
+%%%%%%%%% First let us choose our paper size %%%%%%%%%
+\newif\ifafour
+\newif\ifletter
+\newcommand{\basicwidth}{\textwidth}
+\newcommand{\basicscale}{1.0} %there is probably a better way to do this
+
+\@ifclasswith{scrbook}{a5paper}
+{%
+  \afourtrue
+  \letterfalse
+}{%
+  \afourfalse
+  \lettertrue
+  \renewcommand{\basicwidth}{1.1\textwidth}
+  \renewcommand{\basicscale}{1.1} 
+}
+
+\NewEnviron{letter}{%
+    \ifletter
+        \normalfont
+        \BODY
+    \fi
+}
+
+\NewEnviron{a4}{%
+    \ifafour
+        \normalfont
+        \BODY
+    \fi
+}
+%%%% end of paper size
+
+%%% Do the thing! %%%%%%%%%%%%%
+\AtBeginDocument{%
+
+
+  % Set up the headers
+  \setupheaders
+}
+%%%%%%% thing done %%%%%%%%%%%%%%%
+
+%font setup
+
+
+\newcommand{\HUGE}{\fontsize{30}{30}\selectfont}
+
+\setmainfont{EBGaramond}[
+    Extension=.otf,
+    UprightFont=*-Regular,
+    ItalicFont=*-Italic,
+    BoldFont=*-Bold,
+    Numbers=Lining,
+    UprightFeatures={CharacterVariant=11}
+]
+
+\newfontfamily\chapterfont{EBGaramond}[
+    Extension=.otf,
+    UprightFont=*-Regular,
+    ItalicFont=*-Italic,
+    BoldFont=*-Bold,
+    Numbers=Lining,
+    UprightFeatures={CharacterVariant=11}
+]%Makes a good default. If needed, override in document with \renewfontfamily\chapterfont{whatever}
+
+
+%\newfontfamily\headerfont{EB Garamond}[Numbers=Lining,UprightFeatures={CharacterVariant=11}]
+
+
+
+\setkomafont{chapter}{\bindery@chapterfont\Huge\bfseries}
+
+\addtokomafont{disposition}{\normalfont}
+
+\defaultfontfeatures{Ligatures=TeX}
+
+%in case we need a sans font; Gillius is nice
+\setsansfont[
+Scale=MatchUppercase,
+UprightFont = *-Regular.otf,
+ItalicFont = *-Italic.otf
+]{GilliusADF}
+
+%Misc setup
+
+\setdefaultlanguage[variant=uk]{english} %most of the texts I do are British, so it makes sense to have this as a default. Override in document with \setdefaultlanguage[variant=us]{english} or whatever.
+
+\newcommand*\hideentrynumber[1]{}
+
+\setlist[description]{font=\normalfont\bfseries}
+
+\graphicspath{ {./images/} } %default location for pictures
+
+\MakeAutoQuote{<}{>} %signal to csquotes that everything between < and > is a quotation
+\catcode`\—=13
+\protected\def—{\textemdash\allowbreak} %allow breaks after an emdash (but not before, because that would be silly)
+\newcommand\longdash{\mbox{—\,}\ignorespaces{}} %corrects issue with lines breaking between dash and end quote
+\newcommand\longdots{\mbox{\textellipsis\,}\ignorespaces{}} %corrects issue with lines breaking between ellipsis and end quote
+\newcommand\doubleemdash{⸺} %because two emdashes concatenated can theoretically break across lines, which is bad
+
+
+
+\renewcommand*{\partformat}{\partname~\thepart} %renew so it doesn't have the trailing period
+
+
+
+% Nice portable scene divider, auto-centered and with a bit of vertical space
+\newcommand{\divider}{%
+  \par\vspace{0.5em plus 1em minus 0.25em}%
+  \noindent\hfil\rule{0.5\textwidth}{.4pt}\hfil%
+  \par\vspace{0.5em plus 1em minus 0.25em}%
+}
+
+
+
+\flushbottom
+
+% Why are epigraph's defaults so hideous?
+\setlength{\epigraphwidth}{0.8\textwidth}
+\renewcommand{\epigraphflush}{center}
+\renewcommand{\sourceflush}{center}
+
+
+%%%%%%%%%%%%%%%%%%% Chapter heads %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setkomafont{chapter}{\chapterfont\Huge}
+
+\newcommand{\resetchapskip}{\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}}} %should we wish to restore the chapter head settings
+
+\renewcommand\raggedsection{\centering} %always center chapter heads
+
+% Balanced chapter heading position
+\RedeclareSectionCommand[
+  beforeskip=2.0\baselineskip,
+  afterskip=1.5\baselineskip
+]{chapter}
+
+%%%%%%%%%%%%%%% Part heads %%%%%%%%%%%%%%%%
+%Ugly kludge to get a part head to look consistent with the chapter heads as declared above
+\patchcmd\@part
+  {\thepart\hspace{1em}}
+  {\HUGE\bfseries{\partname}\ \thepart\hspace{1em}}
+  {}{}
+
+%%%%%%%%%%%%%%%% Section heads %%%%%%%%%%%%%%%%%%%%%
+% For short stories with chapters. 
+
+\ifbindery@shortStories
+	\RedeclareSectionCommand[
+	  font=\normalfont\LARGE,
+	  style=chapter,
+	  %afterskip=1.725\baselineskip plus .115\baselineskip minus .192\baselineskip
+	]{section} %default values for chapter, per KOMA documentation, which we are applying to section
+
+	% \RedeclareSectionCommand[
+	  % font=\normalfont\Huge,
+	% ]{chapter} %embiggen chapter headings relative to section
+
+	% Make section titles centered like chapters and remove numbering
+	\renewcommand*{\sectionformat}{}  % Remove any automatic numbering format
+	\renewcommand*{\sectionmarkformat}{}  % Remove numbering from marks too
+	\renewcommand*{\sectionlinesformat}[4]{%
+	  \parbox{\textwidth}{\centering#4}%
+	}
+
+	\renewcommand*{\chapterformat}{}  % Remove "Chapter X" from chapter heads
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%% Chapter marking setup %%%%%%%%%%%%%%%%%%%%%
+
+\automark{chapter}
+
+\def\bindery@title{}
+
+\headsep=10pt
+\headheight=45pt
+\footskip=30pt
+
+% Command to setup all the headers
+\newcommand{\setupheaders}{%
+
+    \@ifundefined{@title}{%
+      \lehead{}% If no title is given, just leave blank
+    }{%
+      \lehead{\@title}% Use document title from \title command
+    }%
+
+    % \setkomafont{pagehead}{\normalfont\Large\itshape}
+    % \addtokomafont{pagehead}{\addfontfeature{Numbers=Lining,CharacterVariant=11}}
+    
+    % \setkomafont{pagefoot}{\normalfont\Large\itshape}
+    % \addtokomafont{pagefoot}{\addfontfeature{Numbers=Lining,CharacterVariant=11}}
+ 
+  % Handle chapter marks based on options
+  \ifbindery@shortStories
+    
+    \renewcommand*{\chaptermarkformat}{}  % Remove chapter number from headers
+    
+    % Set right header to show right mark (which will be chapter:section when available)
+    \rohead{\rightmark}
+  \else
+    \ifbindery@namedChapters
+      \ifbindery@romanChapters
+        % Roman numerals for chapters: TRUE; chapters have titles: TRUE
+        \renewcommand{\thechapter}{\Roman{chapter}}
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \arabic{chapter}:\ ##1}{}%
+        }
+      \else
+         % Roman numerals for chapters: FALSE; chapters have titles: TRUE
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \thechapter:\ ##1}{}%
+        }
+      \fi
+    \else
+      \ifbindery@romanChapters
+        % Roman numerals for chapters: TRUE; chapters have titles: FALSE
+        \renewcommand{\thechapter}{\Roman{chapter}}
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \arabic{chapter}}{}%
+        }
+      \else
+        % Roman numerals for chapters: FALSE; chapters have titles: FALSE
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \thechapter}{}%
+        }
+      \fi
+    \fi
+    % Set right header on odd pages to chapter info (for non-short stories)
+    \rohead{\leftmark}
+  \fi
+}
+
+
+%%%%%%%%%%%%%%%% end of chapter marking setup %%%%%%%%%%%%%%%%
+
+
+%%%% Other stuffs %%%%%%%%%%%
+
+% Oldmoney: Outputs numbers formatted in pounds-shillings-pence for use in historical British works. Usage: 
+% \oldmoney{1}{7}{9} -> £1 7s. 9d. (with "s." and "d." italicized)
+% You can leave any of the three arguments blank. The command will assume the blank value is zero and silently suppress it:
+% \oldmoney{60}{}{1} -> £60 1d.
+% \oldmoney{}{3}{1} -> 3s. 1d. 
+
+\newcommand{\oldmoney}[3]{%
+  \ifnum#1>0
+    {\pounds}#1%
+    \ifnum#2>0\,#2\textit{s}.\fi
+    \ifnum#3>0\,#3\textit{d}.\fi
+  \else
+    \ifnum#2>0
+      #2\textit{s}.%
+      \ifnum#3>0\,#3\textit{d}.\fi
+    \else
+      \ifnum#3>0
+        #3\textit{d}.%
+      \else
+        %
+      \fi
+    \fi
+  \fi
+}
+
+\newcommand{\headlesschapter}[1]{%just in case we need to suppress the chapter head
+  \begingroup
+  \let\@makechapterhead\@gobble % make \@makechapterhead do nothing
+  \chapter{#1}
+  \endgroup
+}
+
+
+
+\makeatother

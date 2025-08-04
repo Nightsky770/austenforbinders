@@ -1,0 +1,179 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{illustrations}
+
+\RequirePackage{floatpag}
+\RequirePackage{caption}
+\RequirePackage{rotating}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{wrapfig}
+\RequirePackage{environ}
+\RequirePackage{xparse}
+\RequirePackage{tikz}
+
+\usetikzlibrary{positioning,calc}
+
+\floatpagestyle{empty}
+\rotfloatpagestyle{empty}
+
+\captionsetup[figure]{font=sc,labelformat=empty}
+\graphicspath{ {./images/} }
+
+\renewcommand{\listfigurename}{List of Illustrations} 
+%can override this later, but this is usually what we want
+
+\makeatletter
+
+\renewcommand{\listoffigures}{%
+  \cleardoublepage
+  \chapter*{\listfigurename}%
+  \@mkboth{\listfigurename}{\listfigurename}%
+  \addcontentsline{toc}{chapter}{\protect\numberline{}{\listfigurename}}%
+  \pagestyle{plain}%
+  \@starttoc{lof}%
+  \thispagestyle{plain}%
+}
+
+\newcommand{\imagetoc}[2]{%  % #1: image file, #2: scale factor
+  \ifx\relax\detokenize{#2}\relax
+    \PackageWarning{illustrations}{Scale factor missing in \protect\imagetoc{#1}. Using default 0.8}%
+    \renewcommand{\contentsname}{\includegraphics[width=0.8\linewidth]{#1}}%
+  \else
+    \renewcommand{\contentsname}{\includegraphics[width=#2\linewidth]{#1}}%
+  \fi
+}
+
+\newcommand{\imagelof}[3]{%  % #1: image file, #2: ToC text, #3: scale factor
+  \renewcommand{\listfigurename}{\includegraphics[width=#3\linewidth]{#1}}
+  \addcontentsline{toc}{chapter}{#2}
+  \renewcommand{\listoffigures}{%
+    \begingroup
+      \listoffigures@heading
+      \@starttoc{lof}%
+    \endgroup
+  }
+}
+
+% Define a helper command for the LoF heading
+\newcommand{\listoffigures@heading}{%
+  \if@twocolumn\@restonecoltrue\onecolumn
+  \else\@restonecolfalse\fi
+  \chapter*{\listfigurename}%
+  \if@restonecol\twocolumn\fi
+}
+
+\makeatother
+
+\DeclareTOCStyleEntry[
+  linefill=\TOCLineLeaderFill,
+  indent=0pt,
+  beforeskip=0.5em,
+  entrynumberformat=\hideentrynumber
+]{tocline}{figure}
+
+
+
+% #1: scale of picture relative to \textwidth. Default is 1.2
+% #2: image file name
+% #3: caption
+% #4: short caption for LoF
+% #5: label
+\NewDocumentEnvironment{colorbigpic}{O{1.0} m o o o}
+{%
+  \begin{figure}[p]
+    \vfill
+%    \vspace*{-0.5cm}
+    \makebox[\textwidth][c]{%
+      \begin{minipage}{#1\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{#2}
+        \IfValueT{#3}{%
+          \par\vspace{1em}%
+          \begin{minipage}{0.9\linewidth}%
+            \centering
+            \IfValueTF{#4}{%
+              \caption[#4]{#3}%
+            }{%
+              \caption{#3}%
+            }%
+            \IfValueT{#5}{%
+              \label{#5}%
+            }%
+          \end{minipage}
+        }
+      \end{minipage}%
+    }
+    \vfill
+  \end{figure}
+}
+{}
+
+
+
+% % Environment for black and white big pictures with normal captions
+
+% Environment for black and white big pictures with normal captions
+\NewDocumentEnvironment{bwbigpic}{O{1.2} m o o o}
+{%
+  \begin{figure}[p]
+    \vfill
+%    \vspace*{-0.5cm}  % Comment out or remove problematic fixed spacing
+    \makebox[\textwidth][c]{%
+      \begin{minipage}{#1\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{#2}
+        \IfValueT{#3}{%  % Only create caption if #3 is provided
+          \par\vspace{1em}%
+          \begin{minipage}{0.9\linewidth}%
+            \centering
+            \IfValueTF{#4}{%
+              \caption[#4]{#3}%
+            }{%
+              \caption{#3}%
+            }%
+            \IfValueT{#5}{%
+              \label{#5}%
+            }%
+          \end{minipage}
+        }
+      \end{minipage}%
+    }
+    \vfill
+  \end{figure}
+}
+{}
+
+
+% \NewDocumentEnvironment{bwbigpic}{O{1.2} m o o o}
+% {%
+  % \begin{figure}[p]
+    % \vfill
+    % \vspace*{-0.5cm}
+    % \makebox[\textwidth][c]{%
+      % \begin{minipage}{#1\textwidth}
+        % \centering
+        % \includegraphics[width=\linewidth]{#2}
+        % \par\vspace{1em}%
+        % \begin{minipage}{0.9\linewidth}%
+          % \centering
+          % \IfValueTF{#4}{%
+            % \caption[#4]{#3}%
+          % }{%
+            % \caption{#3}%
+          % }%
+          % \IfValueTF{#5}{%
+            % \label{#5}%
+          % }{}%
+		  % \end{minipage}
+      % \end{minipage}%
+    % }
+    % \vfill
+  % \end{figure}
+% }
+% {}
+
+%using \imagetoc and \imagelof
+% \imagetoc{contents} %Assumes there will be a file called "contents.jpg", "contents.png", etc. in a directory where LaTeX knows to look for images
+% \imagelof{illustrations}{List of Illustrations}
+% \tableofcontents
+% \listoffigures

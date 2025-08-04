@@ -1,51 +1,38 @@
 \documentclass[
-paper=5.5in:8.5in,
-%a5paper,
+%paper=5.5in:8.5in,
+a5paper,
 ]{scrbook} 
 
-\usepackage{bindery}
+\title{Pride \& Prejudice}
+
+\usepackage[romanChapters]{bindery}
 \usepackage{illustrations}
 \usepackage{dropcaps}
 \usepackage{artheadings}
 \usepackage{epistolary}
 
 
-\makeatletter
-\@ifundefined{ifpictures}{\newif\ifpictures}{}
-\makeatother
-\picturestrue
-%\picturesfalse
-
-\ifpictures
-    \includecomment{pictures}
-    \excludecomment{placeholder}
-\else
-    \excludecomment{pictures}
-    \includecomment{placeholder}
-\fi
-
-\renewcommand{\thechapter}{\Roman{chapter}}
-
 \BeforeTOCHead[toc]{%
   \KOMAoptions{parskip=false}% no parskip in ToC
-  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
+  \RedeclareSectionCommand[afterskip=1em]{chapter}% 
 }
 \BeforeTOCHead[tocline]{%
   \KOMAoptions{parskip=false,numwidth=0}% no parskip in ToC
-  \RedeclareSectionCommand[afterskip=1sp minus 1sp]{chapter}% no skip after ToC title
+  \RedeclareSectionCommand[afterskip=1em]{chapter}% 
 }
-\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
-\DeclareTOCStyleEntry[beforeskip=.1cm,numwidth=-15pt,entrynumberformat=\hideentrynumber]{tocline}{figure}
+\DeclareTOCStyleEntry[beforeskip=.4cm,numwidth=0pt,entrynumberformat=\hideentrynumber,linefill=\TOCLineLeaderFill]{chapter}{chapter}
+\DeclareTOCStyleEntry[beforeskip=.15cm,numwidth=0pt,entrynumberformat=\hideentrynumber]{tocline}{figure}
 
-\automark{chapter}
-\lehead{Pride \& Prejudice}
-\rohead{Chapter \arabic{chapter}}
-\flushbottom
+%\automark{chapter}
+%\lehead{}
+%\rohead{Chapter \arabic{chapter}}
+%\flushbottom
 
 
 \hyphenation{Dar-cy Ben-net Bing-ley Lu-cas Mery-ton Eliz-a-beth Wick-ham Col-lins}
 
 \begin{document}
+
 \frontmatter
 \pagestyle{empty}
 
@@ -53,16 +40,13 @@ paper=5.5in:8.5in,
 \clearpage
 \KOMAoptions{headings=openleft}
 \includepdf[width=.5\textwidth]{halftitle.jpg}
-\begin{letter}
- \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=1.1\textwidth]{frontispiece.jpg}
- \includepdf[addtolist={1,figure,Title Page,titlepage},width=1.2\textwidth]{titlepage1.jpg}
-\end{letter}
-\begin{a4}
-  \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=\textwidth]{frontispiece.jpg}
-  \includepdf[addtolist={1,figure,Title Page,titlepage},width=1.1\textwidth]{titlepage1.jpg}
-\end{a4}
 
-\renewcommand*{\chaptermarkformat}{}
+ \includepdf[addtolist={1,figure,Frontispiece: Reading Jane's Letters,frontispiece},width=0.9\textwidth]{frontispiece.jpg}
+ 
+
+ 
+ \includepdf[addtolist={1,figure,Title Page,titlepage},width=\basicwidth]{titlepage1.jpg}
+
 \renewcommand*{\chapterheadendvskip}{\vspace{0pt}}
 \renewcommand*{\chapterheadstartvskip}{\vspace{0pt}} %because all chapters have head artwork, no need for whitespace
 \KOMAoptions{headings=openleft}
