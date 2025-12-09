@@ -1,4 +1,5 @@
 \RequirePackage{xcolor}
+\RequirePackage[verbose]{polyglossia}
 \RequirePackage{fontspec}
 \RequirePackage[T1]{fontenc} % International character encodings
 \RequirePackage{makeidx}
@@ -6,7 +7,6 @@
 \RequirePackage{pifont}
 \RequirePackage[maxlevel=3,autostyle]{csquotes}
 \RequirePackage[export]{adjustbox}
-\RequirePackage{polyglossia}
 \RequirePackage{afterpage}
 \RequirePackage{microtype}
 \RequirePackage{tocbasic}
@@ -14,82 +14,110 @@
 \RequirePackage{subfiles}
 \RequirePackage[all,defaultlines=2]{nowidow}
 \RequirePackage{setspaceenhanced}
-\RequirePackage{ebgaramond} 
+\RequirePackage[lining]{ebgaramond} 
 \RequirePackage{ellipsis}
 \RequirePackage{pdfpages}
 \RequirePackage{verse}
 \RequirePackage{epigraph}
-\RequirePackage{comment}
+\RequirePackage{environ}
 \RequirePackage{etoolbox}
 \RequirePackage{soul}
 \RequirePackage{enumitem}
 \RequirePackage{needspace}
 \RequirePackage[shortcuts]{extdash} %Allows for auto-breaks at hyphens: Lud\-/in\-/the\-/Mist
-
+\RequirePackage{ulem} %provides strikeout command \sout
 
 \KOMAoption{BCOR}{7mm}
 \KOMAoption{twoside}{true}
 \KOMAoption{DIV}{calc}
 \KOMAoption{usegeometry}{true}
 \KOMAoption{chapterprefix}{true}
-\KOMAoption{headings}{big}
+\KOMAoption{headings}{big,optiontoheadandtoc}
 \KOMAoption{numbers}{noenddot}
 \KOMAoption{listof}{flat,nochaptergap,totoc}
 \KOMAoption{toc}{listof}
 
 
-% Define all key-value options first
-\makeatletter
-\DeclareBoolOption{namedChapters}
-\DeclareBoolOption{romanChapters}
-\DeclareBoolOption{shortStories}
-\DeclareStringOption[\normalfont]{chapterfont}
-\DeclareStringOption[]{workTitle}
-\ProcessKeyvalOptions*
+\newif\ifbindery@namedChapters
+\newif\ifbindery@romanChapters  
+\newif\ifbindery@shortStories
+\def\bindery@chapterfont{\normalfont}
+\def\bindery@workTitle{}
 
+\DeclareOption{namedChapters}{\bindery@namedChapterstrue}
+\DeclareOption{romanChapters}{\bindery@romanChapterstrue}
+\DeclareOption{shortStories}{\bindery@shortStoriestrue}
+\DeclareOption*{\PackageWarning{bindery}{Unknown option '\CurrentOption'}}
+\ProcessOptions\relax
+
+% Now do the paper size selection and other @ code
+\makeatletter
 %%%%%%%%% First let us choose our paper size %%%%%%%%%
+\newif\ifafour
+\newif\ifletter
+\newcommand{\basicwidth}{\textwidth}
+\newcommand{\basicscale}{1.0} %there is probably a better way to do this
+
 \@ifclasswith{scrbook}{a5paper}
 {%
-  \includecomment{a4}
-  \excludecomment{letter}
-  \newcommand{\coverwidth}{\textwidth}
+  \afourtrue
+  \letterfalse
 }{%
-  \excludecomment{a4}
-  \includecomment{letter}
-  \newcommand{\coverwidth}{1.1\textwidth}
+  \afourfalse
+  \lettertrue
+  \renewcommand{\basicwidth}{1.1\textwidth}
+  \renewcommand{\basicscale}{1.1} 
+}
+
+\NewEnviron{letter}{%
+    \ifletter
+        \normalfont
+        \BODY
+    \fi
+}
+
+\NewEnviron{a4}{%
+    \ifafour
+        \normalfont
+        \BODY
+    \fi
 }
 %%%% end of paper size
 
 %%% Do the thing! %%%%%%%%%%%%%
 \AtBeginDocument{%
-  % First check if the worktitle option was set and apply it
-  \@ifundefined{bindery@worktitle@}{}{%
-    \setworktitle{\bindery@worktitle@}%
-  }
+
 
   % Set up the headers
   \setupheaders
 }
-%%%%%%% thing doing %%%%%%%%%%%%%%%
+%%%%%%% thing done %%%%%%%%%%%%%%%
+
+%font setup
 
 
-%Misc setup
+\newcommand{\HUGE}{\fontsize{30}{30}\selectfont}
 
-\setkomafont{chapter}{\chapterfont\Huge\bfseries}
+\setmainfont{EBGaramond}[
+    Extension=.otf,
+    UprightFont=*-Regular,
+    ItalicFont=*-Italic,
+    BoldFont=*-Bold,
+    Numbers=Lining,
+	SmallCapsFeatures = {Numbers = Lining},
+    UprightFeatures={CharacterVariant=11}
+]
 
-\newcommand*\hideentrynumber[1]{}
 
-\setlist[description]{font=\normalfont\bfseries}
+\newfontfamily\chapterfont{EBGaramond}[
+    Extension=.otf,
+    UprightFont=*-Regular,
+    ItalicFont=*-Italic,
+    BoldFont=*-Bold,
+    Numbers=Lining,
+    UprightFeatures={CharacterVariant=11}
+]%Makes a good default. If needed, override in document with \renewfontfamily\chapterfont{whatever}
 
-\graphicspath{ {./images/} } %default location for pictures
-
-\MakeAutoQuote{<}{>}
-\catcode`\—=13
-\protected\def—{\textemdash\allowbreak} %allow breaks after an emdash (but not before, because that would be silly)
-\newcommand\longdash{\mbox{—\,}\ignorespaces{}} %corrects issue with lines breaking between dash and end quote
-\newcommand\doubleemdash{⸺} %because two emdashes concatenated can theoretically break across lines, which is bad
-
-\renewcommand*{\partformat}{\partname~\thepart} %renew so it doesn't have the trailing period
 
 %in case we need a sans font; Gillius is nice
 \setsansfont[
@@ -98,6 +126,38 @@ UprightFont = *-Regular.otf,
 ItalicFont = *-Italic.otf
 ]{GilliusADF}
 
+
+\setkomafont{chapter}{\bindery@chapterfont\Huge\bfseries}
+
+\addtokomafont{disposition}{\normalfont}
+
+\defaultfontfeatures{Ligatures=TeX}
+
+
+
+%Misc setup
+
+\setdefaultlanguage[variant=uk]{english} %most of the texts I do are British, so it makes sense to have this as a default. Override in document with \setdefaultlanguage[variant=us]{english} or whatever.
+
+\newcommand*\hideentrynumber[1]{}
+
+\setlist[description]{font=\normalfont\bfseries}
+
+\graphicspath{ {./images/} } %default location for pictures
+
+\MakeAutoQuote{<}{>} %signal to csquotes that everything between < and > is a quotation
+\catcode`\—=13
+\protected\def—{\textemdash\allowbreak} %allow breaks after an emdash (but not before, because that would be silly)
+\newcommand\longdash{\mbox{—\,}\ignorespaces{}} %corrects issue with lines breaking between dash and end quote
+\newcommand\longdots{\mbox{\textellipsis\,}\ignorespaces{}} %corrects issue with lines breaking between ellipsis and end quote
+\newcommand\doubleemdash{⸺} %because two emdashes concatenated can theoretically break across lines, which is bad
+
+
+
+\renewcommand*{\partformat}{\partname~\thepart} %renew so it doesn't have the trailing period
+
+
+
 % Nice portable scene divider, auto-centered and with a bit of vertical space
 \newcommand{\divider}{%
   \par\vspace{0.5em plus 1em minus 0.25em}%
@@ -105,16 +165,8 @@ ItalicFont = *-Italic.otf
   \par\vspace{0.5em plus 1em minus 0.25em}%
 }
 
-\newcommand{\HUGE}{\fontsize{30}{30}\selectfont}
 
-\setdefaultlanguage[variant=uk]{english} %most of the texts I do are British, so it makes sense to have this as a default
-
-\setmainfont{EB Garamond}[UprightFeatures={CharacterVariant=11}] %for some reason, EB Garamond uses a weird "I" glyph for "1". Use variant form for normal looking "1". 
-
-\addtokomafont{disposition}{\normalfont}
-
-\defaultfontfeatures{Ligatures=TeX}
-
+%make bottoms of pages line up. Opposite is \raggedbottom .
 \flushbottom
 
 % Why are epigraph's defaults so hideous?
@@ -125,7 +177,6 @@ ItalicFont = *-Italic.otf
 
 %%%%%%%%%%%%%%%%%%% Chapter heads %%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newfontfamily\chapterfont{EB Garamond} %Makes a good default. If needed, override in document with \renewfontfamily\chapterfont{whatever}
 \setkomafont{chapter}{\chapterfont\Huge}
 
 \newcommand{\resetchapskip}{\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}}} %should we wish to restore the chapter head settings
@@ -138,15 +189,43 @@ ItalicFont = *-Italic.otf
   afterskip=1.5\baselineskip
 ]{chapter}
 
+%%%%%%%%%%%%%%% Part heads %%%%%%%%%%%%%%%%
+%Ugly kludge to get a part head to look consistent with the chapter heads as declared above
+\patchcmd\@part
+  {\thepart\hspace{1em}}
+  {\HUGE\bfseries{\partname}\ \thepart\hspace{1em}}
+  {}{}
+
+%%%%%%%%%%%%%%%% Section heads %%%%%%%%%%%%%%%%%%%%%
+% For short stories with chapters. 
+
+\ifbindery@shortStories
+	\RedeclareSectionCommand[
+	  font=\normalfont\LARGE,
+	  style=chapter,
+	  %afterskip=1.725\baselineskip plus .115\baselineskip minus .192\baselineskip
+	]{section} %default values for chapter, per KOMA documentation, which we are applying to section
+
+	% \RedeclareSectionCommand[
+	  % font=\normalfont\Huge,
+	% ]{chapter} %embiggen chapter headings relative to section
+
+	% Make section titles centered like chapters and remove numbering
+	\renewcommand*{\sectionformat}{}  % Remove any automatic numbering format
+	\renewcommand*{\sectionmarkformat}{}  % Remove numbering from marks too
+	\renewcommand*{\sectionlinesformat}[4]{%
+	  \parbox{\textwidth}{\centering#4}%
+	}
+
+	\renewcommand*{\chapterformat}{}  % Remove "Chapter X" from chapter heads
+\fi
+
+
 %%%%%%%%%%%%%%%%%%%%%% Chapter marking setup %%%%%%%%%%%%%%%%%%%%%
 
 \automark{chapter}
 
 \def\bindery@title{}
-
-\newcommand{\setworktitle}[1]{%
-  \def\bindery@title{#1}%
-}
 
 \headsep=10pt
 \headheight=45pt
@@ -154,66 +233,103 @@ ItalicFont = *-Italic.otf
 
 % Command to setup all the headers
 \newcommand{\setupheaders}{%
-  % Check if a title is manually set via \setworktitle
-  \ifx\bindery@title\@empty
-    % If not, check if we have a document title
+
     \@ifundefined{@title}{%
-      \lehead{}% Fallback if no title is defined
+      \lehead{}% If no title is given, just leave blank
     }{%
       \lehead{\@title}% Use document title from \title command
     }%
-  \else
-    \lehead{\bindery@title}% Use manually set title
-  \fi
-  
+
+
   % Handle chapter marks based on options
-  	\ifbindery@shortStories
-		% Short stories have titles only, and no chapter numbers.
-		\renewcommand{\chaptermark}[1]{%
-			\markboth{##1}{}%
-		}
-	\else
-	  \ifbindery@namedChapters
-		\ifbindery@romanChapters
-			% Roman numerals for chapters: TRUE; chapters have titles: TRUE
-			% "Chapter V: My Adventure Continues" (will appear in header as "Chapter 5", because it's a pain to constantly have to stop and translate Roman numerals when reading)
-			\renewcommand{\thechapter}{\Roman{chapter}}
-			\renewcommand{\chaptermark}[1]{%
-			\markboth{\chaptername\ \arabic{chapter}:\ ##1}{}%
-		  }
-		\else
-		   % Roman numerals for chapters: FALSE; chapters have titles: TRUE
-			% "Chapter 2: Stuff Happens"
-		  \renewcommand{\chaptermark}[1]{%
-			\markboth{\chaptername\ \thechapter:\ ##1}{}%
-		  }
-		\fi
-	  \else
-		\ifbindery@romanChapters
-			% Roman numerals for chapters: TRUE; chapters have titles: FALSE
-			% "Chapter XLIX" (will appear in header as "Chapter 49", because it's a pain to constantly have to stop and translate Roman numerals when reading)
-			\renewcommand{\thechapter}{\Roman{chapter}}
-			\renewcommand{\chaptermark}[1]{%
-			\markboth{\chaptername\ \arabic{chapter}}{}%
-		  }
-		\else
-		  % Roman numerals for chapters: FALSE; chapters have titles: FALSE
-		  % "Chapter 3"
-		  \renewcommand{\chaptermark}[1]{%
-			\markboth{\chaptername\ \thechapter}{}%
-		  }
-		\fi
-	  \fi
-	\fi
-  % Set right header on odd pages to chapter info
-  \rohead{\leftmark}
+  \ifbindery@shortStories
+    \renewcommand*{\chaptermarkformat}{}  % Remove chapter number from headers
+    
+    % Put chapter title directly in rightmark for stories without sections
+    \renewcommand*{\chaptermark}[1]{%
+        \markright{##1}%  % Put chapter title in rightmark
+    }
+    
+    % But also handle sections if they exist
+    \renewcommand*{\sectionmarkformat}{}  % Remove section number from headers
+    \newcommand*{\currentchaptertitle}{}
+    \let\oldchaptermark\chaptermark
+    \renewcommand*{\chaptermark}[1]{%
+        \renewcommand*{\currentchaptertitle}{##1}%
+        \markright{##1}%  % Default: just chapter title
+        \oldchaptermark{##1}%
+    }
+    \renewcommand*{\sectionmark}[1]{%
+        \markright{\currentchaptertitle: ##1}%  % Override with chapter: section
+    }
+    
+    \rohead{\rightmark}
+  \else
+    \ifbindery@namedChapters
+      \ifbindery@romanChapters
+        % Roman numerals for chapters: TRUE; chapters have titles: TRUE
+		% "Chapter IV: Stuff Happens"
+		% Chapter number will be in Arabic numerals in the header, b/c it's a PITA to decode Roman numerals while reading
+        \renewcommand{\thechapter}{\Roman{chapter}}
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \arabic{chapter}:\ ##1}{}%
+        }
+      \else
+         % Roman numerals for chapters: FALSE; chapters have titles: TRUE
+		% "Chapter 2: It Begins"
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \thechapter:\ ##1}{}%
+        }
+      \fi
+    \else
+      \ifbindery@romanChapters
+        % Roman numerals for chapters: TRUE; chapters have titles: FALSE
+		% "Chapter XVII"
+		% Chapter number will be in Arabic numerals in the header, b/c it's a PITA to decode Roman numerals while reading
+        \renewcommand{\thechapter}{\Roman{chapter}}
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \arabic{chapter}}{}%
+        }
+      \else
+        % Roman numerals for chapters: FALSE; chapters have titles: FALSE
+		% "Chapter 9"
+        \renewcommand{\chaptermark}[1]{%
+        \markboth{\chaptername\ \thechapter}{}%
+        }
+      \fi
+    \fi
+    % Set right header on odd pages to chapter info (for non-short stories)
+    \rohead{\leftmark}
+  \fi
 }
+
+
 %%%%%%%%%%%%%%%% end of chapter marking setup %%%%%%%%%%%%%%%%
 
 
 %%%% Other stuffs %%%%%%%%%%%
 
-% Supports output in pounds-shillings-pence for use in historical British works. Usage: 
+%spell out chapter numbers, or use ordinal numbers: Chapter One, or Chapter the First. (obvs for this latter you'll also need to redefine \chapterformat to "Chapter~the~\thechapter".) I've only gone through "ten"; there is probably a more elegant way to do this if you need to go higher.
+% Usage: \renewcommand{\thechapter}{\spelled{chapter}} or  \renewcommand{\thechapter}{\ordinal{chapter}}
+
+
+\newcommand*{\spelled}[1]{%
+  \expandafter\@spelled\csname c@#1\endcsname
+}
+\newcommand*{\@spelled}[1]{%
+  \ifcase#1\or{One}\or{Two}\or{Three}\or{Four}\or{Five}\or{Six}\or{Seven}\or{Eight}\or{Nine}\or{Ten}
+  \else\@ctrerr\fi
+}
+
+\newcommand*{\ordinal}[1]{%
+  \expandafter\@ordinal\csname c@#1\endcsname
+}
+\newcommand*{\@ordinal}[1]{%
+  \ifcase#1\or{First}\or{Second}\or{Third}\or{Fourth}\or{Fifth}\or{Sixth}\or{Seventh}\or{Eighth}\or{Ninth}\or{Tenth}
+  \else\@ctrerr\fi
+}
+
+% Oldmoney: Outputs numbers formatted in pounds-shillings-pence for use in historical British works. Usage: 
 % \oldmoney{1}{7}{9} -> £1 7s. 9d. (with "s." and "d." italicized)
 % You can leave any of the three arguments blank. The command will assume the blank value is zero and silently suppress it:
 % \oldmoney{60}{}{1} -> £60 1d.
@@ -245,10 +361,6 @@ ItalicFont = *-Italic.otf
   \endgroup
 }
 
-%Ugly kludge to get a part head to look consistent with the chapter heads as declared above
-\patchcmd\@part
-  {\thepart\hspace{1em}}
-  {\HUGE\bfseries{\partname}\ \thepart\hspace{1em}}
-  {}{}
 
-  \makeatother
+
+\makeatother

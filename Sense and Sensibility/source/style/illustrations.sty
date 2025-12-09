@@ -19,96 +19,21 @@
 \captionsetup[figure]{font=sc,labelformat=empty}
 \graphicspath{ {./images/} }
 
-
 \renewcommand{\listfigurename}{List of Illustrations} 
 %can override this later, but this is usually what we want
 
 \makeatletter
+
 \renewcommand{\listoffigures}{%
   \cleardoublepage
   \chapter*{\listfigurename}%
   \@mkboth{\listfigurename}{\listfigurename}%
-  \addcontentsline{toc}{chapter}{\protect\numberline{}{\listfigurename}}%
+%  \addcontentsline{toc}{chapter}{\protect\numberline{}{\listfigurename}}%
+\addcontentsline{toc}{chapter}{\listfigurename}%
   \pagestyle{plain}%
   \@starttoc{lof}%
   \thispagestyle{plain}%
 }
-\makeatother
-
-\DeclareTOCStyleEntry[
-  linefill=\TOCLineLeaderFill,
-  indent=0pt,
-  beforeskip=0.5em,
-  entrynumberformat=\hideentrynumber
-]{tocline}{figure}
-
-%Great big pictures! Yes, they're the same, except that colorbigpic's entries in the LoI will be bolded. Someday I will do this properly by passing in an argument or something.
-%using colorbigpic
-%\begin{colorbigpic}
-%	[1.15] <-desired width, relative to \textwidth
-%	{bobslide} <-name of image file
-%	{Bob Cratchit went down a slide on Cornhill, at the end of a lane of boys, twenty times, in honour of its being Christmas Eve} <-caption
-	%[Bob Cratchit went down a slide] <-brief caption for TOC
-	%[bob] <- label, if necessary. To get a label but NOT a brief caption, put in a blank [] before this argument.
-%\end{colorbigpic}
-
-\NewDocumentEnvironment{colorbigpic}{O{1.2} m m o o}
-{%
-  \begin{figure}[p]
-    \vfill
-    \vspace*{-0.5cm}
-    \makebox[\textwidth][c]{%
-      \begin{minipage}{#1\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{#2}
-        \par\vspace{1em}%
-        \begin{minipage}{0.9\linewidth}%
-          \centering
-          \IfValueTF{#4}{%
-            \caption[\textbf{#4}]{#3}%
-          }{%
-            \caption[\textbf{#3}]{#3}%
-          }%
-          \IfValueTF{#5}{%
-            \label{#5}%
-          }{}%
-        \end{minipage}
-      \end{minipage}%
-    }
-    \vfill
-  \end{figure}
-}
-{}
-
-% Environment for black and white big pictures with normal captions
-\NewDocumentEnvironment{bwbigpic}{O{1.2} m m o o}
-{%
-  \begin{figure}[p]
-    \vfill
-    \vspace*{-0.5cm}
-    \makebox[\textwidth][c]{%
-      \begin{minipage}{#1\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{#2}
-        \par\vspace{1em}%
-        \begin{minipage}{0.9\linewidth}%
-          \centering
-          \IfValueTF{#4}{%
-            \caption[#4]{#3}%
-          }{%
-            \caption{#3}%
-          }%
-          \IfValueTF{#5}{%
-            \label{#5}%
-          }{}%
-		  \end{minipage}
-      \end{minipage}%
-    }
-    \vfill
-  \end{figure}
-}
-{}
-\makeatletter
 
 \newcommand{\imagetoc}[2]{%  % #1: image file, #2: scale factor
   \ifx\relax\detokenize{#2}\relax
@@ -130,9 +55,6 @@
   }
 }
 
-
-
-
 % Define a helper command for the LoF heading
 \newcommand{\listoffigures@heading}{%
   \if@twocolumn\@restonecoltrue\onecolumn
@@ -140,12 +62,90 @@
   \chapter*{\listfigurename}%
   \if@restonecol\twocolumn\fi
 }
+
 \makeatother
 
+\DeclareTOCStyleEntry[
+  linefill=\TOCLineLeaderFill,
+  indent=1em,
+  beforeskip=0.5em,
+  entrynumberformat=\hideentrynumber
+]{tocline}{figure}
+
+
+
+% #1: scale of picture relative to \textwidth. Default is 1.0
+% #2: image file name
+% #3: caption
+% #4: short caption for LoF
+% #5: label
+\NewDocumentEnvironment{colorbigpic}{O{1.0} m o o o}
+{%
+  \begin{figure}[p]
+    \vfill
+%    \vspace*{-0.5cm}
+    \makebox[\textwidth][c]{%
+      \begin{minipage}{#1\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{#2}
+        \IfValueT{#3}{%
+          \par\vspace{1em}%
+          \begin{minipage}{0.9\linewidth}%
+            \centering
+            \IfValueTF{#4}{%
+              \caption[\textbf{#4}]{#3}%
+            }{%
+              \caption[\textbf{#3}]{#3}%
+            }%
+            \IfValueT{#5}{%
+              \label{#5}%
+            }%
+          \end{minipage}
+        }
+      \end{minipage}%
+    }
+    \vfill
+  \end{figure}
+}
+{}
+
+
+
+% Environment for black and white big pictures with normal captions
+\NewDocumentEnvironment{bwbigpic}{O{1.0} m o o o}
+{%
+  \begin{figure}[p]
+    \vfill
+%    \vspace*{-0.5cm} 
+    \makebox[\textwidth][c]{%
+      \begin{minipage}{#1\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{#2}
+        \IfValueT{#3}{%  
+          \par\vspace{1em}%
+          \begin{minipage}{0.9\linewidth}%
+            \centering
+            \IfValueTF{#4}{%
+              \caption[#4]{#3}%
+            }{%
+              \caption{#3}%
+            }%
+            \IfValueT{#5}{%
+              \label{#5}%
+            }%
+          \end{minipage}
+        }
+      \end{minipage}%
+    }
+    \vfill
+  \end{figure}
+}
+{}
+
 %using \imagetoc and \imagelof
-% \imagetoc{contents}
-% \imagelof{illustrations}{List of Illustrations}
+% \imagetoc{contents} %Assumes there will be a file called "contents.jpg", "contents.png", etc. in a directory where LaTeX knows to look for images
 % \tableofcontents
+
+
+% \imagelof{illustrations}{List of Illustrations} %As above, assumes there will be a file called "illustrations.jpg" or something
 % \listoffigures
-
-
