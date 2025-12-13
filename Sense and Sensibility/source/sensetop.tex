@@ -15,7 +15,7 @@ a5paper,
 
 \renewfontfamily\chapterfont{Amarante-Regular.ttf}
 \setdropcaps{FloralCapsNouveau.ttf}
-
+\renewcommand{\DefaultLraise}{0.3}
 
 \BeforeTOCHead[toc]{%
   \KOMAoptions{parskip=false}% no parskip in ToC
@@ -151,10 +151,13 @@ Title page decoration is from a Roycroft catalog published in 1906. Last page de
 \includegraphics[width=.4\textwidth]{flourish}
 \vfill
 \begin{minipage}{\textwidth}
-This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed. 
+Printed on Mohawk Superfine and hand-bound in California.
 \end{minipage}
-\vfill
-creativecommons.org/publicdomain/zero/1.0/
+%\begin{minipage}{\textwidth}
+%This typeset is dedicated to the public domain under a Creative Commons CC0 1.0 Universal deed. 
+%\end{minipage}
+%\vfill
+%creativecommons.org/publicdomain/zero/1.0/
 \vfill
 \includegraphics[width=.4\textwidth]{flourish}
 \vfill
